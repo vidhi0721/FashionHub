@@ -1,0 +1,771 @@
+{% extends "adminpanel/index.html" %}
+{% load static %}
+
+{% block admin_content %}
+
+<link rel="stylesheet" href="{% static 'adminpanel/css/products.css' %}">
+
+<div class="container-fluid py-4">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">Add Product</h2>
+
+        <a href="{% url 'admin_products' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+
+    </div>
+
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+
+        <!-- =====================================================
+             PRODUCT DETAILS
+        ====================================================== -->
+
+        <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+            <div class="card-header bg-primary text-white">
+
+                <h4 class="mb-0">
+                    <i class="fa-solid fa-box-open"></i>
+                    Product Details
+                </h4>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row">
+
+
+                    <!-- ================= PRODUCT NAME ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Product Name
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="name"
+                            placeholder="Enter Product Name"
+                            required>
+
+                    </div>
+
+
+                    <!-- ================= MAIN CATEGORY ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Main Category
+                        </label>
+
+                        <select
+                            class="form-select"
+                            id="mainCategory"
+                            required>
+
+                            <option value="">
+                                Select Main Category
+                            </option>
+
+                            {% for c in categories %}
+
+                                {% if not c.parent %}
+
+                                <option value="{{ c.id }}">
+                                    {{ c.name }}
+                                </option>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ================= SUB CATEGORY ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Sub Category
+                        </label>
+
+                        <select
+                            class="form-select"
+                            name="category"
+                            id="subCategory"
+                            required>
+
+                            <option value="">
+                                Select Sub Category
+                            </option>
+
+                            {% for c in categories %}
+
+                                {% if c.parent %}
+
+                                <option
+                                    value="{{ c.id }}"
+                                    data-parent="{{ c.parent.id }}">
+
+                                    {{ c.name }}
+
+                                </option>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ================= BRAND ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Brand Name
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="brand"
+                            placeholder="Enter Brand Name"
+                            required>
+
+                    </div>
+
+
+                    <!-- ================= DISCOUNT ================= -->
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label">
+                            Discount (%)
+                        </label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="discount"
+                            min="0"
+                            max="100"
+                            value="0">
+
+                    </div>
+
+
+                    <!-- ================= RATING ================= -->
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label">
+                            Rating
+                        </label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="rating"
+                            min="0"
+                            max="5"
+                            step="0.1"
+                            value="0">
+
+                    </div>
+
+                    <!-- ================= STATUS ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Status
+                        </label>
+
+                        <select
+                            class="form-select"
+                            name="status">
+
+                            <option value="In Stock">
+                                In Stock
+                            </option>
+
+                            <option value="Out of Stock">
+                                Out of Stock
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         SIZE + PRICE + STOCK
+                    ================================================== -->
+
+                    <div class="col-md-12 mb-4">
+
+                        <label class="form-label fw-bold">
+                            Available Sizes, Price & Stock
+                        </label>
+
+                        <div class="border rounded-3 p-3 bg-light">
+
+
+                            <!-- ================= TABLE HEADER ================= -->
+
+                            <div class="row fw-bold mb-2">
+
+                                <div class="col-md-4">
+                                    Size
+                                </div>
+
+                                <div class="col-md-4">
+                                    Price
+                                </div>
+
+                                <div class="col-md-3">
+                                    Stock
+                                </div>
+
+                                <div class="col-md-1">
+                                </div>
+
+                            </div>
+
+
+                            <!-- ================= SIZE CONTAINER ================= -->
+
+                            <div id="sizeContainer">
+
+
+                                <!-- ================= FIRST SIZE ================= -->
+
+                                <div class="row g-2 mb-2 size-row">
+
+
+                                    <!-- SIZE -->
+
+                                    <div class="col-md-4">
+
+                                        <input
+                                            type="text"
+                                            name="size_name"
+                                            class="form-control"
+                                            placeholder="Example: S">
+
+                                    </div>
+
+
+                                    <!-- PRICE -->
+
+                                    <div class="col-md-4">
+
+                                        <input
+                                            type="number"
+                                            name="size_price"
+                                            class="form-control"
+                                            placeholder="Example: 999"
+                                            min="0"
+                                            step="0.01">
+
+                                    </div>
+
+
+                                    <!-- STOCK -->
+
+                                    <div class="col-md-3">
+
+                                        <input
+                                            type="number"
+                                            name="size_stock"
+                                            class="form-control"
+                                            placeholder="Example: 10"
+                                            min="0">
+
+                                    </div>
+
+
+                                    <!-- DELETE -->
+
+                                    <div class="col-md-1">
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-danger w-100"
+                                            onclick="removeSize(this)">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ================= ADD SIZE ================= -->
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary btn-sm mt-2"
+                                onclick="addSize()">
+
+                                <i class="fa-solid fa-plus"></i>
+                                Add Size
+
+                            </button>
+
+
+                        </div>
+
+
+                        <small class="text-muted">
+
+                            Enter different price and stock for each size.
+
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- ================= COLORS ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Available Colors
+                        </label>
+
+                        <input
+                            type="text"
+                            name="color"
+                            class="form-control"
+                            placeholder="Example: Black, Red, Blue, Pink">
+
+                        <small class="text-muted">
+                            Separate colors with comma
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- ================= PRODUCT IMAGE ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Product Image
+                        </label>
+
+                        <input
+                            type="file"
+                            class="form-control"
+                            name="image"
+                            required>
+
+                    </div>
+
+
+
+                    <!-- ================= SHORT DESCRIPTION ================= -->
+
+                    <div class="col-12 mb-3">
+
+                        <label class="form-label">
+                            Short Description
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            rows="3"
+                            name="short_description"
+                            placeholder="Enter short description"></textarea>
+
+                    </div>
+
+
+
+                    <!-- ================= DESCRIPTION ================= -->
+
+                    <div class="col-12">
+
+                        <label class="form-label">
+                            Description
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            rows="6"
+                            name="description"
+                            placeholder="Enter product description"></textarea>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             PRODUCT HIGHLIGHTS
+        ====================================================== -->
+
+        <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+                    Product Highlights
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div id="highlight-box">
+
+                    <input
+                        type="text"
+                        class="form-control mb-2"
+                        name="highlights"
+                        placeholder="Enter Highlight">
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    onclick="addHighlight()">
+
+                    <i class="fa-solid fa-plus"></i>
+                    Add Highlight
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             PRODUCT OFFERS
+        ====================================================== -->
+
+        <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+            <div class="card-header bg-warning">
+
+                <h5 class="mb-0">
+                    Product Offers
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div id="offer-box">
+
+                    <input
+                        type="text"
+                        class="form-control mb-2"
+                        name="offers"
+                        placeholder="Enter Offer">
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn btn-outline-warning"
+                    onclick="addOffer()">
+
+                    <i class="fa-solid fa-plus"></i>
+                    Add Offer
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             SAVE PRODUCT
+        ====================================================== -->
+
+        <div class="text-end">
+
+            <button
+                type="submit"
+                class="btn btn-success btn-lg">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Product
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   MAIN CATEGORY → SUB CATEGORY
+========================================================= */
+
+document
+    .getElementById("mainCategory")
+    .addEventListener("change", function () {
+
+        let mainCategory = this.value;
+
+        let subCategory =
+            document.getElementById("subCategory");
+
+        let options =
+            subCategory.querySelectorAll("option");
+
+        subCategory.value = "";
+
+
+        options.forEach(function (option) {
+
+            if (option.value === "") {
+
+                option.style.display = "block";
+
+            }
+
+            else if (
+                option.dataset.parent === mainCategory
+            ) {
+
+                option.style.display = "block";
+
+            }
+
+            else {
+
+                option.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+
+
+/* =========================================================
+   ADD SIZE
+========================================================= */
+
+function addSize() {
+
+    let container =
+        document.getElementById("sizeContainer");
+
+
+    let div =
+        document.createElement("div");
+
+
+    div.className =
+        "row g-2 mb-2 size-row";
+
+
+    div.innerHTML = `
+
+        <!-- SIZE -->
+
+        <div class="col-md-4">
+
+            <input
+                type="text"
+                name="size_name"
+                class="form-control"
+                placeholder="Example: M">
+
+        </div>
+
+
+        <!-- PRICE -->
+
+        <div class="col-md-4">
+
+            <input
+                type="number"
+                name="size_price"
+                class="form-control"
+                placeholder="Example: 1099"
+                min="0"
+                step="0.01">
+
+        </div>
+
+
+        <!-- STOCK -->
+
+        <div class="col-md-3">
+
+            <input
+                type="number"
+                name="size_stock"
+                class="form-control"
+                placeholder="Example: 15"
+                min="0">
+
+        </div>
+
+
+        <!-- DELETE -->
+
+        <div class="col-md-1">
+
+            <button
+                type="button"
+                class="btn btn-outline-danger w-100"
+                onclick="removeSize(this)">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    container.appendChild(div);
+
+}
+
+
+
+/* =========================================================
+   REMOVE SIZE
+========================================================= */
+
+function removeSize(button) {
+
+    let row =
+        button.closest(".size-row");
+
+
+    if (row) {
+
+        row.remove();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   ADD HIGHLIGHT
+========================================================= */
+
+function addHighlight() {
+
+    let input =
+        document.createElement("input");
+
+
+    input.type = "text";
+
+    input.name = "highlights";
+
+    input.placeholder =
+        "Enter Highlight";
+
+    input.className =
+        "form-control mb-2";
+
+
+    document
+        .getElementById("highlight-box")
+        .appendChild(input);
+
+}
+
+
+
+/* =========================================================
+   ADD OFFER
+========================================================= */
+
+function addOffer() {
+
+    let input =
+        document.createElement("input");
+
+
+    input.type = "text";
+
+    input.name = "offers";
+
+    input.placeholder =
+        "Enter Offer";
+
+    input.className =
+        "form-control mb-2";
+
+
+    document
+        .getElementById("offer-box")
+        .appendChild(input);
+
+}
+
+</script>
+
+
+{% endblock %}

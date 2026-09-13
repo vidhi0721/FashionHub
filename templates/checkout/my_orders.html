@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+
+<h1 class="fw-bold mb-4">
+    My Orders
+</h1>
+
+
+{% for order in orders %}
+
+<div class="card shadow-sm rounded-4 p-4 mb-4">
+
+
+    <h4 class="mb-3">
+        Order ID: #{{order.id}}
+    </h4>
+
+
+    {% for item in order.orderitem_set.all %}
+
+    <div class="d-flex align-items-center border-top pt-3 mt-3">
+
+
+        <img src="{{ item.product.image.url }}"
+        style="
+        width:100px;
+        height:100px;
+        object-fit:contain;
+        border-radius:10px;
+        ">
+
+
+        <div class="ms-4">
+
+            <h5 class="fw-bold">
+                {{ item.product.name }}
+            </h5>
+
+
+            <p class="mb-1">
+                Quantity: {{ item.quantity }}
+            </p>
+
+
+            <p class="mb-1">
+                Price: ₹{{ item.price }}
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+    {% endfor %}
+
+
+
+    <div class="mt-3">
+
+        <span class="badge bg-success">
+            {{order.status}}
+        </span>
+
+    </div>
+
+
+</div>
+
+
+{% empty %}
+
+<h4>No Orders Found</h4>
+
+{% endfor %}
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,2829 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="ai-page">
+
+    <div class="ai-container">
+
+        <!-- ===================================================== -->
+        <!-- HEADER -->
+        <!-- ===================================================== -->
+
+        <div class="ai-header">
+
+            <div class="ai-avatar">
+                🤖
+            </div>
+
+            <h1>AI Fashion Stylist</h1>
+
+            <p>
+                Let's create your perfect look ✨
+            </p>
+
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- CHAT BOX -->
+        <!-- ===================================================== -->
+
+        <div class="chat-box" id="ai-chat">
+
+
+            <!-- ================================================= -->
+            <!-- CHAT HISTORY -->
+            <!-- ================================================= -->
+
+            {% for message in chat_messages %}
+
+                {% if message.sender == "user" %}
+
+                    <div class="chat-message user">
+
+                        <div class="user-bubble">
+                            {{ message.text }}
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="chat-message bot">
+
+                        <div class="chat-icon">
+                            🤖
+                        </div>
+
+                        <div class="bubble">
+                            {{ message.text }}
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+
+            <!-- ================================================= -->
+            <!-- STEP 0 : CATEGORY -->
+            <!-- ================================================= -->
+
+            {% if step == "category" %}
+
+                <div class="question-area">
+
+                    <div class="chat-message bot">
+
+                        <div class="chat-icon">
+                            🤖
+                        </div>
+
+                        <div class="bubble">
+
+                            What are you shopping for? 🛍️
+
+                            <br>
+
+                            Choose a category and I'll help you find
+                            the perfect products.
+
+                        </div>
+
+                    </div>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="step"
+                            value="category"
+                        >
+
+                        <div class="small-options">
+
+                            <button
+                                type="submit"
+                                name="category"
+                                value="Women"
+                                class="small-option"
+                            >
+                                👗 Women
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="category"
+                                value="Men"
+                                class="small-option"
+                            >
+                                👕 Men
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="category"
+                                value="Beauty"
+                                class="small-option"
+                            >
+                                💄 Beauty
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="category"
+                                value="Bags"
+                                class="small-option"
+                            >
+                                👜 Bags
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- ================================================= -->
+            <!-- STEP 1 : SUBCATEGORY -->
+            <!-- ================================================= -->
+
+            {% if step == "subcategory" %}
+
+                <div class="question-area">
+
+                    <div class="chat-message bot">
+
+                        <div class="chat-icon">
+                            🤖
+                        </div>
+
+                        <div class="bubble">
+
+                            Great choice! 😊
+
+                            <br>
+
+                            What type of product are you looking for?
+
+                        </div>
+
+                    </div>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="step"
+                            value="subcategory"
+                        >
+
+
+                        <div class="small-options">
+
+                            {% for item in subcategory_options %}
+
+                                <button
+                                    type="submit"
+                                    name="subcategory"
+                                    value="{{ item }}"
+                                    class="small-option"
+                                >
+
+                                    {% if item == "Dress" %}
+                                        👗
+                                    {% elif item == "Tops" %}
+                                        👚
+                                    {% elif item == "Saree" %}
+                                        🥻
+                                    {% elif item == "Ethnic Wear" %}
+                                        👘
+                                    {% elif item == "Jeans" %}
+                                        👖
+                                    {% elif item == "T-Shirts" %}
+                                        👕
+                                    {% elif item == "Shirt" %}
+                                        👔
+                                    {% elif item == "Watch" %}
+                                        ⌚
+                                    {% elif item == "Belt" %}
+                                        🪢
+                                    {% elif item == "Makeup" %}
+                                        💄
+                                    {% elif item == "Haircare" %}
+                                        💇
+                                    {% elif item == "Skincare" %}
+                                        🧴
+                                    {% elif item == "Handbag" %}
+                                        👜
+                                    {% elif item == "Wallet" %}
+                                        👛
+                                    {% elif item == "Backpack" %}
+                                        🎒
+                                    {% endif %}
+
+                                    {{ item }}
+
+                                </button>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </form>
+
+
+                    <div class="step-actions">
+
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="step"
+                                value="stop"
+                            >
+
+                            <button
+                                type="submit"
+                                class="stop-btn"
+                            >
+                                ✕ Stop Styling
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- ================================================= -->
+            <!-- STEP 2 : COLOR -->
+            <!-- ================================================= -->
+
+            {% if step == "color" %}
+
+                <div class="question-area">
+
+                    <div class="chat-message bot">
+
+                        <div class="chat-icon">
+                            🤖
+                        </div>
+
+                        <div class="bubble">
+
+                            Great! 🎨
+
+                            <br>
+
+                            Which color do you prefer?
+
+                        </div>
+
+                    </div>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="step"
+                            value="color"
+                        >
+
+
+                        <div class="small-options">
+
+                            <button
+                                type="submit"
+                                name="color"
+                                value="Black"
+                                class="small-option"
+                            >
+                                ⚫ Black
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="color"
+                                value="White"
+                                class="small-option"
+                            >
+                                ⚪ White
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="color"
+                                value="Brown"
+                                class="small-option"
+                            >
+                                🤎 Brown / Beige
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="color"
+                                value="Blue"
+                                class="small-option"
+                            >
+                                🔵 Blue
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="color"
+                                value="Pink"
+                                class="small-option"
+                            >
+                                🌸 Pink
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="color"
+                                value="Green"
+                                class="small-option"
+                            >
+                                💚 Green
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="color"
+                                value="Purple"
+                                class="small-option"
+                            >
+                                💜 Purple
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="color"
+                                value="Any"
+                                class="small-option"
+                            >
+                                🌈 Any Color
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                    <div class="step-actions">
+
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="step"
+                                value="skip"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="skip_step"
+                                value="color"
+                            >
+
+                            <button
+                                type="submit"
+                                class="skip-btn"
+                            >
+                                Skip →
+                            </button>
+
+                        </form>
+
+
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="step"
+                                value="stop"
+                            >
+
+                            <button
+                                type="submit"
+                                class="stop-btn"
+                            >
+                                ✕ Stop Styling
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- ================================================= -->
+            <!-- STEP 3 : BUDGET -->
+            <!-- ================================================= -->
+
+            {% if step == "budget" %}
+
+                <div class="question-area">
+
+                    <div class="chat-message bot">
+
+                        <div class="chat-icon">
+                            🤖
+                        </div>
+
+                        <div class="bubble">
+
+                            Almost done! ✨
+
+                            <br>
+
+                            What's your budget?
+
+                        </div>
+
+                    </div>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="step"
+                            value="budget"
+                        >
+
+
+                        <div class="small-options">
+
+                            <button
+                                type="submit"
+                                name="budget"
+                                value="1000"
+                                class="small-option"
+                            >
+                                💵 Under ₹1,000
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="budget"
+                                value="2000"
+                                class="small-option"
+                            >
+                                💵 ₹1,000 – ₹2,000
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="budget"
+                                value="3000"
+                                class="small-option"
+                            >
+                                💵 ₹2,000 – ₹3,000
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="budget"
+                                value="5000"
+                                class="small-option"
+                            >
+                                💵 ₹3,000 – ₹5,000
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                name="budget"
+                                value="5000+"
+                                class="small-option"
+                            >
+                                💵 ₹5,000+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                    <div class="step-actions">
+
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="step"
+                                value="skip"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="skip_step"
+                                value="budget"
+                            >
+
+                            <button
+                                type="submit"
+                                class="skip-btn"
+                            >
+                                Skip →
+                            </button>
+
+                        </form>
+
+
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="step"
+                                value="stop"
+                            >
+
+                            <button
+                                type="submit"
+                                class="stop-btn"
+                            >
+                                ✕ Stop Styling
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- ================================================= -->
+            <!-- RESULT -->
+            <!-- ================================================= -->
+
+            {% if step == "result" %}
+
+
+                <!-- ================================================= -->
+                <!-- NO PRODUCTS -->
+                <!-- ================================================= -->
+
+                {% if outfit.no_products %}
+
+                    <div class="no-result">
+
+                        <div class="no-result-icon">
+                            😔
+                        </div>
+
+
+                        <h3>
+                            No matching products found
+                        </h3>
+
+
+                        <p>
+                            No products matched your selected
+                            category, color and budget.
+                        </p>
+
+
+                        <p class="no-result-help">
+
+                            Try another combination or add more
+                            products from the Admin Panel.
+
+                        </p>
+
+
+                        <a
+                            href="?reset=1"
+                            class="shop-btn"
+                        >
+                            Try Again
+                        </a>
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <!-- ================================================= -->
+                    <!-- SUCCESS MESSAGE -->
+                    <!-- ================================================= -->
+
+                    <div class="chat-message bot">
+
+                        <div class="chat-icon">
+                            🤖
+                        </div>
+
+                        <div class="bubble">
+
+                            Perfect! ✨
+
+                            <br>
+
+                            {% if outfit.is_complete_outfit %}
+
+                                I created a complete outfit for you. 💖
+
+                            {% else %}
+
+                                I found the best products for you. 🛍️
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- RESULT SUMMARY -->
+                    <!-- ================================================= -->
+
+                    <div class="result-summary">
+
+                        {% if main_category %}
+
+                            <span>
+                                🛍️ {{ main_category }}
+                            </span>
+
+                        {% endif %}
+
+
+                        {% if subcategory %}
+
+                            <span>
+                                👗 {{ subcategory }}
+                            </span>
+
+                        {% endif %}
+
+
+                        {% if color and main_category != "Beauty" %}
+
+                            <span>
+                                🎨 {{ color }}
+                            </span>
+
+                        {% endif %}
+
+
+                        {% if budget %}
+
+                            <span>
+                                💰 Budget ₹{{ budget }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- NORMAL PRODUCT RESULT -->
+                    <!-- ================================================= -->
+
+                    {% if not outfit.is_complete_outfit %}
+
+
+                        <div class="complete-look-header">
+
+                            <span class="complete-badge">
+                                ✨ AI RECOMMENDATIONS
+                            </span>
+
+
+                            <h2 class="look-title">
+
+                                {{ subcategory|default:"Recommended Products" }}
+
+                            </h2>
+
+
+                            <p class="look-subtitle">
+
+                                {{ outfit.recommendations|length }}
+
+                                product{{ outfit.recommendations|length|pluralize }}
+
+                                selected specially for you
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- ================================================= -->
+                        <!-- RECOMMENDED PRODUCTS -->
+                        <!-- ================================================= -->
+
+                        <div class="recommended-products">
+
+                            {% for product in outfit.recommendations %}
+
+                                <div class="recommended-card">
+
+
+                                    <div class="recommended-badge">
+                                        AI PICK
+                                    </div>
+
+
+                                    {% if product.image %}
+
+                                        <img
+                                            src="{{ product.image }}"
+                                            alt="{{ product.name }}"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="recommended-no-image">
+                                            🛍️
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <div class="recommended-info">
+
+
+                                        {% if product.category %}
+
+                                            <small>
+                                                {{ product.category }}
+                                            </small>
+
+                                        {% endif %}
+
+
+                                        <h3>
+                                            {{ product.name }}
+                                        </h3>
+
+
+                                        <strong>
+                                            ₹{{ product.price|floatformat:0 }}
+                                        </strong>
+
+
+                                        <div class="product-actions">
+
+                                            <a
+                                                href="{% url 'product_details' product.id %}"
+                                                class="view-btn"
+                                            >
+                                                View Product →
+                                            </a>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- COMPLETE THE LOOK -->
+                        <!-- ================================================= -->
+
+                        {% if outfit.matching_products %}
+
+                            <div class="matching-section">
+
+                                <div class="section-heading matching-heading">
+
+                                    <span class="heading-icon">
+                                        💖
+                                    </span>
+
+
+                                    <div>
+
+                                        <h3>
+                                            Complete The Look
+                                        </h3>
+
+                                        <p>
+                                            Smaller matching recommendations selected by AI
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="matching-products">
+
+                                    {% for product in outfit.matching_products %}
+
+                                        <div class="matching-card">
+
+
+                                            <div class="matching-badge">
+                                                MATCH
+                                            </div>
+
+
+                                            {% if product.image %}
+
+                                                <img
+                                                    src="{{ product.image }}"
+                                                    alt="{{ product.name }}"
+                                                >
+
+                                            {% else %}
+
+                                                <div class="matching-no-image">
+                                                    🛍️
+                                                </div>
+
+                                            {% endif %}
+
+
+                                            <div class="matching-info">
+
+
+                                                {% if product.category %}
+
+                                                    <small>
+                                                        {{ product.category }}
+                                                    </small>
+
+                                                {% endif %}
+
+
+                                                <h4>
+                                                    {{ product.name }}
+                                                </h4>
+
+
+                                                <div class="matching-price">
+                                                    ₹{{ product.price|floatformat:0 }}
+                                                </div>
+
+
+                                                <a
+                                                    href="{% url 'product_details' product.id %}"
+                                                    class="matching-view-btn"
+                                                >
+                                                    View Product
+                                                </a>
+
+                                            </div>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+
+                        <!-- ================================================= -->
+                        <!-- NORMAL ACTIONS -->
+                        <!-- ================================================= -->
+
+                        <div class="action-buttons">
+
+                            <a
+                                href="{% url 'shop' %}"
+                                class="shop-btn"
+                            >
+                                🛍️ Shop Products
+                            </a>
+
+
+                            <a
+                                href="?reset=1"
+                                class="again-btn"
+                            >
+                                🔄 Generate Again
+                            </a>
+
+                        </div>
+
+
+                    {% endif %}
+
+
+
+                    <!-- ================================================= -->
+                    <!-- COMPLETE OUTFIT RESULT -->
+                    <!-- ================================================= -->
+
+                    {% if outfit.is_complete_outfit %}
+
+
+                        <div class="complete-look-header">
+
+                            <span class="complete-badge">
+                                ✨ COMPLETE OUTFIT
+                            </span>
+
+
+                            <h2 class="look-title">
+
+                                {{ outfit.look_title|default:"Your Complete Outfit" }}
+
+                            </h2>
+
+
+                            <p class="look-subtitle">
+
+                                A complete combination of products selected by AI
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- ================================================= -->
+                        <!-- COMPLETE OUTFIT PRODUCTS -->
+                        <!-- ================================================= -->
+
+                        {% if outfit.complete_outfit_products %}
+
+                            <div class="section-heading">
+
+                                <span class="heading-icon">
+                                    👑
+                                </span>
+
+
+                                <div>
+
+                                    <h3>
+                                        Your Complete Outfit
+                                    </h3>
+
+                                    <p>
+                                        Different products styled together for you
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="complete-outfit-products">
+
+                                {% for product in outfit.complete_outfit_products %}
+
+                                    <div class="outfit-card">
+
+
+                                        <div class="product-role">
+                                            ✨ OUTFIT ITEM
+                                        </div>
+
+
+                                        {% if product.image %}
+
+                                            <img
+                                                src="{{ product.image }}"
+                                                alt="{{ product.name }}"
+                                            >
+
+                                        {% else %}
+
+                                            <div class="no-image">
+                                                🛍️
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        <div class="outfit-info">
+
+
+                                            {% if product.category %}
+
+                                                <small>
+                                                    {{ product.category }}
+                                                </small>
+
+                                            {% endif %}
+
+
+                                            <h3>
+                                                {{ product.name }}
+                                            </h3>
+
+
+                                            <strong>
+                                                ₹{{ product.price|floatformat:0 }}
+                                            </strong>
+
+
+                                            <a
+                                                href="{% url 'product_details' product.id %}"
+                                                class="view-btn"
+                                            >
+                                                View Product →
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+
+                        <!-- ================================================= -->
+                        <!-- AFTER COMPLETE OUTFIT -->
+                        <!-- ================================================= -->
+
+                        {% if outfit.recommendations %}
+
+                            <div class="recommendation-after-outfit">
+
+                                <div class="section-heading">
+
+                                    <span class="heading-icon">
+                                        ⭐
+                                    </span>
+
+
+                                    <div>
+
+                                        <h3>
+                                            You May Also Like
+                                        </h3>
+
+                                        <p>
+                                            More products you may like
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="recommended-products">
+
+                                    {% for product in outfit.recommendations %}
+
+                                        <div class="recommended-card">
+
+
+                                            <div class="recommended-badge">
+                                                RECOMMENDED
+                                            </div>
+
+
+                                            {% if product.image %}
+
+                                                <img
+                                                    src="{{ product.image }}"
+                                                    alt="{{ product.name }}"
+                                                >
+
+                                            {% else %}
+
+                                                <div class="recommended-no-image">
+                                                    🛍️
+                                                </div>
+
+                                            {% endif %}
+
+
+                                            <div class="recommended-info">
+
+
+                                                {% if product.category %}
+
+                                                    <small>
+                                                        {{ product.category }}
+                                                    </small>
+
+                                                {% endif %}
+
+
+                                                <h3>
+                                                    {{ product.name }}
+                                                </h3>
+
+
+                                                <strong>
+                                                    ₹{{ product.price|floatformat:0 }}
+                                                </strong>
+
+
+                                                <a
+                                                    href="{% url 'product_details' product.id %}"
+                                                    class="view-btn"
+                                                >
+                                                    View Product →
+                                                </a>
+
+                                            </div>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+
+                        <!-- ================================================= -->
+                        <!-- COMPLETE OUTFIT ACTIONS -->
+                        <!-- ================================================= -->
+
+                        <div class="action-buttons">
+
+                            <a
+                                href="{% url 'shop' %}"
+                                class="shop-btn"
+                            >
+                                🛍️ Shop This Outfit
+                            </a>
+
+
+                            <a
+                                href="?reset=1"
+                                class="again-btn"
+                            >
+                                🔄 Generate Another
+                            </a>
+
+                        </div>
+
+
+                    {% endif %}
+
+                {% endif %}
+
+            {% endif %}
+
+
+
+            <!-- ================================================= -->
+            <!-- CHAT INPUT -->
+            <!-- ================================================= -->
+
+            <div class="chat-input-area">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <input
+                        type="text"
+                        name="message"
+                        placeholder="Ask AI Stylist anything..."
+                        autocomplete="off"
+                        required
+                    >
+
+
+                    <button type="submit">
+                        ➤
+                    </button>
+
+                </form>
+
+
+                <small>
+
+                    💡 Try:
+
+                    "pink dress under 3000",
+
+                    "black saree under 5000",
+
+                    "blue jeans under 2000",
+
+                    "complete party outfit",
+
+                    "complete wedding outfit"
+
+                </small>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<style>
+
+/* ========================================================= */
+/* PAGE */
+/* ========================================================= */
+
+.ai-page {
+
+    min-height: 90vh;
+
+    background: #fff9fc;
+
+    padding: 45px 15px;
+
+}
+
+
+.ai-container {
+
+    max-width: 1000px;
+
+    margin: auto;
+
+}
+
+
+/* ========================================================= */
+/* HEADER */
+/* ========================================================= */
+
+.ai-header {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+}
+
+
+.ai-avatar {
+
+    width: 70px;
+
+    height: 70px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 38px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7C3AED,
+            #EC4899
+        );
+
+    box-shadow:
+        0 8px 22px
+        rgba(108,44,241,.2);
+
+}
+
+
+.ai-header h1 {
+
+    font-size: 32px;
+
+    font-weight: 800;
+
+    margin-top: 15px;
+
+}
+
+
+.ai-header p {
+
+    color: #777;
+
+}
+
+
+/* ========================================================= */
+/* CHAT BOX */
+/* ========================================================= */
+
+.chat-box {
+
+background: #fff;
+
+border-radius: 22px;
+
+padding: 28px;
+
+box-shadow:
+    0 8px 30px
+    rgba(0,0,0,.07);
+
+}
+.chat-box::-webkit-scrollbar {
+    width: 10px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.chat-box::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+/* ========================================================= */
+/* CHAT MESSAGE */
+/* ========================================================= */
+
+.chat-message {
+
+    display: flex;
+
+    gap: 10px;
+
+    align-items: flex-start;
+
+    margin-bottom: 18px;
+
+}
+
+
+.chat-message.user {
+
+    justify-content: flex-end;
+
+}
+
+
+.chat-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #f3edff;
+
+    font-size: 21px;
+
+}
+
+
+.bubble {
+
+    max-width: 75%;
+
+    background: #f4efff;
+
+    padding: 12px 17px;
+
+    border-radius: 16px;
+
+    color: #444;
+
+    line-height: 1.5;
+
+}
+
+
+.user-bubble {
+
+    max-width: 70%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7C3AED,
+            #EC4899
+        );
+
+    color: white;
+
+    padding: 11px 16px;
+
+    border-radius:
+        16px 16px 4px 16px;
+
+}
+
+
+/* ========================================================= */
+/* QUESTION */
+/* ========================================================= */
+
+.question-area {
+
+    margin-top: 25px;
+
+}
+
+
+.question-area .chat-message {
+
+    margin-bottom: 15px;
+
+}
+
+
+/* ========================================================= */
+/* OPTIONS */
+/* ========================================================= */
+
+.small-options {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    margin-left: 48px;
+
+}
+
+
+.small-option {
+
+    border: 1px solid #e5e5e5;
+
+    background: white;
+
+    padding: 10px 15px;
+
+    border-radius: 12px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+
+.small-option:hover {
+
+    border-color: #7C3AED;
+
+    color: #7C3AED;
+
+    background: #faf7ff;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* ========================================================= */
+/* STEP ACTIONS */
+/* ========================================================= */
+
+.step-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 16px;
+
+}
+
+
+.step-actions form {
+
+    margin: 0;
+
+}
+
+
+.skip-btn,
+.stop-btn {
+
+    border-radius: 20px;
+
+    padding: 9px 17px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+    background: white;
+
+}
+
+
+.skip-btn {
+
+    border: 1px solid #ddd;
+
+    color: #666;
+
+}
+
+
+.skip-btn:hover {
+
+    border-color: #7C3AED;
+
+    color: #7C3AED;
+
+    background: #faf7ff;
+
+}
+
+
+.stop-btn {
+
+    border: 1px solid #ddd;
+
+    color: #777;
+
+}
+
+
+.stop-btn:hover {
+
+    border-color: #ef4444;
+
+    color: #ef4444;
+
+    background: #fff5f5;
+
+}
+
+
+/* ========================================================= */
+/* CHAT INPUT */
+/* ========================================================= */
+
+.chat-input-area {
+
+    border-top: 1px solid #eee;
+
+    margin-top: 30px;
+
+    padding-top: 20px;
+
+}
+
+
+.chat-input-area form {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+.chat-input-area input {
+    flex: 1;
+
+    border: 1px solid #ddd;
+
+    border-radius: 25px;
+
+    padding: 13px 18px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    background: #fff;
+
+    transition: .2s;
+}
+
+.chat-input-area input:focus {
+    border-color: #7C3AED;
+
+    box-shadow:
+        0 0 0 3px rgba(124,58,237,.08);
+}
+
+.chat-input-area button {
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7C3AED,
+            #EC4899
+        );
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 18px;
+}
+
+
+.chat-input-area small {
+
+    display: block;
+
+    margin-top: 8px;
+
+    color: #999;
+
+    line-height: 1.6;
+
+}
+
+
+/* ========================================================= */
+/* RESULT SUMMARY */
+/* ========================================================= */
+
+.result-summary {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin: 25px 0;
+
+}
+
+
+.result-summary span {
+
+    background: #f4efff;
+
+    color: #6d28d9;
+
+    padding: 8px 12px;
+
+    border-radius: 18px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+/* ========================================================= */
+/* RESULT HEADER */
+/* ========================================================= */
+
+.complete-look-header {
+
+    text-align: center;
+
+    margin: 25px 0 30px;
+
+}
+
+
+.complete-badge {
+
+    display: inline-block;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f3e8ff,
+            #fce7f3
+        );
+
+    color: #7C3AED;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: .7px;
+
+}
+
+
+.look-title {
+
+    text-align: center;
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    margin: 12px 0 5px;
+
+}
+
+
+.look-subtitle {
+
+    color: #888;
+
+    font-size: 13px;
+
+    margin: 0;
+
+}
+
+
+/* ========================================================= */
+/* SECTION HEADING */
+/* ========================================================= */
+
+.section-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 25px 0 15px;
+
+}
+
+
+.heading-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background: #f4efff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+
+}
+
+
+.section-heading h3 {
+
+    font-size: 17px;
+
+    margin: 0;
+
+    font-weight: 800;
+
+}
+
+
+.section-heading p {
+
+    margin: 2px 0 0;
+
+    font-size: 12px;
+
+    color: #999;
+
+}
+
+
+/* ========================================================= */
+/* RECOMMENDED PRODUCTS */
+/* ========================================================= */
+
+.recommended-products {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+
+}
+
+
+.recommended-card {
+
+    position: relative;
+
+    border: 1px solid #eee;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    background: white;
+
+    transition: .25s;
+
+    min-width: 0;
+
+}
+
+
+.recommended-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,.08);
+
+}
+
+
+.recommended-card img {
+
+    width: 100%;
+
+    height: 220px;
+
+    object-fit: contain;
+
+    padding: 10px;
+
+}
+
+
+.recommended-no-image {
+
+    width: 100%;
+
+    height: 220px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #faf7ff;
+
+    font-size: 42px;
+
+}
+
+
+.recommended-badge {
+
+    position: absolute;
+
+    top: 9px;
+
+    left: 9px;
+
+    z-index: 2;
+
+    padding: 5px 8px;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7C3AED,
+            #EC4899
+        );
+
+    color: white;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: .5px;
+
+}
+
+
+.recommended-info {
+
+    padding: 13px;
+
+}
+
+
+.recommended-info small {
+
+    color: #7C3AED;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+}
+
+
+.recommended-info h3 {
+
+    font-size: 14px;
+
+    margin: 5px 0 7px;
+
+    min-height: 38px;
+
+    line-height: 1.35;
+
+    color: #333;
+
+}
+
+
+.recommended-info strong {
+
+    color: #7C3AED;
+
+    font-size: 17px;
+
+}
+
+
+/* ========================================================= */
+/* PRODUCT VIEW BUTTON */
+/* ========================================================= */
+
+.view-btn {
+
+    display: block;
+
+    margin-top: 10px;
+
+    padding: 9px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    background: #f4efff;
+
+    color: #6d28d9;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .2s;
+
+}
+
+
+.view-btn:hover {
+
+    background: #7C3AED;
+
+    color: white;
+
+}
+
+
+/* ========================================================= */
+/* MATCHING SECTION */
+/* ========================================================= */
+
+.matching-section {
+
+    margin-top: 30px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid #eeeeee;
+
+}
+
+
+.matching-heading {
+
+    margin-top: 0;
+
+}
+
+
+.matching-products {
+
+    display: flex;
+
+    gap: 14px;
+
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+
+    padding-bottom: 8px;
+
+}
+
+
+.matching-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 15px;
+
+    background: #fff;
+
+    border: 1px solid #eeeeee;
+
+    transition: .25s;
+
+    width: 160px;
+
+    min-width: 160px;
+
+    flex: 0 0 160px;
+
+}
+
+
+.matching-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,.08);
+
+}
+
+
+.matching-card img {
+
+    width: 100%;
+
+    height: 125px;
+
+    object-fit: contain;
+
+    padding: 7px;
+
+}
+
+
+.matching-no-image {
+
+    width: 100%;
+
+    height: 125px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #faf7ff;
+
+    font-size: 32px;
+
+}
+
+
+.matching-badge {
+
+    position: absolute;
+
+    top: 7px;
+
+    left: 7px;
+
+    z-index: 2;
+
+    padding: 4px 7px;
+
+    border-radius: 15px;
+
+    background: #fce7f3;
+
+    color: #db2777;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+}
+
+
+.matching-info {
+
+    padding: 9px;
+
+}
+
+
+.matching-info small {
+
+    color: #7C3AED;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+}
+
+
+.matching-info h4 {
+
+    font-size: 12px;
+
+    margin: 4px 0 6px;
+
+    min-height: 32px;
+
+    line-height: 1.35;
+
+    color: #333;
+
+}
+
+
+.matching-price {
+
+    color: #7C3AED;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+}
+
+
+.matching-view-btn {
+
+    display: block;
+
+    margin-top: 7px;
+
+    padding: 6px;
+
+    text-align: center;
+
+    border-radius: 12px;
+
+    background: #f4efff;
+
+    color: #6d28d9;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    transition: .2s;
+
+}
+
+
+.matching-view-btn:hover {
+
+    background: #7C3AED;
+
+    color: white;
+
+}
+
+
+/* ========================================================= */
+/* COMPLETE OUTFIT */
+/* ========================================================= */
+
+.complete-outfit-products {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+
+}
+
+
+.outfit-card {
+
+    position: relative;
+
+    border: 1px solid #eee;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    background: white;
+
+    transition: .25s;
+
+    min-width: 0;
+
+}
+
+
+.outfit-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,.08);
+
+}
+
+
+.outfit-card img {
+
+    width: 100%;
+
+    height: 220px;
+
+    object-fit: contain;
+
+    padding: 10px;
+
+}
+
+
+.no-image {
+
+    width: 100%;
+
+    height: 220px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #faf7ff;
+
+    font-size: 42px;
+
+}
+
+
+.product-role {
+
+    position: absolute;
+
+    top: 9px;
+
+    left: 9px;
+
+    z-index: 2;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7C3AED,
+            #EC4899
+        );
+
+    color: white;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: .5px;
+
+}
+
+
+.outfit-info {
+
+    padding: 13px;
+
+}
+
+
+.outfit-info small {
+
+    color: #7C3AED;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+}
+
+
+.outfit-info h3 {
+
+    font-size: 14px;
+
+    margin: 5px 0 7px;
+
+    min-height: 38px;
+
+    line-height: 1.35;
+
+}
+
+
+.outfit-info strong {
+
+    color: #7C3AED;
+
+    font-size: 17px;
+
+}
+
+
+/* ========================================================= */
+/* AFTER OUTFIT RECOMMENDATIONS */
+/* ========================================================= */
+
+.recommendation-after-outfit {
+
+    margin-top: 32px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid #eeeeee;
+
+}
+
+
+/* ========================================================= */
+/* ACTION BUTTONS */
+/* ========================================================= */
+
+.action-buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 25px;
+
+}
+
+
+.shop-btn,
+.again-btn {
+
+    padding: 11px 18px;
+
+    border-radius: 22px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    text-align: center;
+
+}
+
+
+.shop-btn {
+
+    background:
+        linear-gradient(
+            90deg,
+            #6C2CF1,
+            #E84393
+        );
+
+    color: white;
+
+}
+
+
+.again-btn {
+
+    background: #f4efff;
+
+    color: #6d28d9;
+
+}
+
+
+.shop-btn:hover {
+
+    color: white;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ========================================================= */
+/* NO RESULT */
+/* ========================================================= */
+
+.no-result {
+
+    text-align: center;
+
+    padding: 35px 10px;
+
+}
+
+
+.no-result-icon {
+
+    font-size: 48px;
+
+}
+
+
+.no-result h3 {
+
+    margin-top: 10px;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+}
+
+
+.no-result p {
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+.no-result-help {
+
+    font-size: 13px !important;
+
+    color: #999 !important;
+
+}
+
+
+/* ========================================================= */
+/* MOBILE */
+/* ========================================================= */
+
+@media(max-width: 900px) {
+
+    .recommended-products,
+    .complete-outfit-products {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media(max-width: 600px) {
+
+    .ai-page {
+
+        padding: 30px 10px;
+
+    }
+
+
+    .chat-box {
+
+    padding: 20px 15px;
+
+    border-radius: 18px;
+
+    max-height: 75vh;
+
+    overflow-y: auto;
+
+    }
+
+
+    .ai-header h1 {
+
+        font-size: 27px;
+
+    }
+
+
+    .small-options {
+
+        margin-left: 0;
+
+    }
+
+
+    .small-option {
+
+        padding: 9px 12px;
+
+        font-size: 13px;
+
+    }
+
+
+    .step-actions {
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .recommended-products,
+    .complete-outfit-products {
+
+        display: flex;
+
+        overflow-x: auto;
+
+        gap: 14px;
+
+        padding-bottom: 8px;
+
+    }
+
+
+    .recommended-card,
+    .outfit-card {
+
+        min-width: 210px;
+
+        width: 210px;
+
+        flex: 0 0 210px;
+
+    }
+
+
+    .recommended-card img,
+    .recommended-no-image,
+    .outfit-card img,
+    .no-image {
+
+        height: 220px;
+
+    }
+
+
+    .matching-products {
+
+        overflow-x: auto;
+
+    }
+
+
+    .action-buttons {
+
+        flex-direction: column;
+
+    }
+
+
+    .action-buttons a {
+
+        text-align: center;
+
+        width: 100%;
+
+    }
+
+
+    .look-title {
+
+        font-size: 22px;
+
+    }
+
+
+    .bubble {
+
+        max-width: 82%;
+
+    }
+
+
+    .user-bubble {
+
+        max-width: 82%;
+
+    }
+
+}
+
+
+@media(max-width:400px) {
+
+    .recommended-card,
+    .outfit-card {
+
+        min-width: 190px;
+
+        width: 190px;
+
+        flex-basis: 190px;
+
+    }
+
+
+    .matching-card {
+
+        width: 150px;
+
+        min-width: 150px;
+
+        flex-basis: 150px;
+
+    }
+
+}
+
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    
+        const chatBox = document.getElementById("ai-chat");
+    
+        if (!chatBox) {
+            return;
+        }
+    
+    
+        /* ===================================================== */
+        /* KEEP PAGE POSITION EXACTLY WHERE USER IS */
+        /* ===================================================== */
+    
+        const pageScrollKey = "ai_fashion_page_scroll";
+    
+    
+        /* Save current page position before submit */
+    
+        document.querySelectorAll("#ai-chat form").forEach(function (form) {
+    
+            form.addEventListener("submit", function () {
+    
+                sessionStorage.setItem(
+                    pageScrollKey,
+                    window.scrollY
+                );
+    
+            });
+    
+        });
+    
+    
+        /* ===================================================== */
+        /* RESTORE PAGE POSITION AFTER DJANGO RELOAD */
+        /* ===================================================== */
+    
+        const savedPosition =
+            sessionStorage.getItem(pageScrollKey);
+    
+    
+        if (savedPosition !== null) {
+    
+            sessionStorage.removeItem(pageScrollKey);
+    
+            /*
+             * Restore after browser has finished
+             * rendering the new Django page.
+             */
+    
+            requestAnimationFrame(function () {
+    
+                requestAnimationFrame(function () {
+    
+                    window.scrollTo({
+                        top: parseInt(savedPosition, 10),
+                        left: 0,
+                        behavior: "auto"
+                    });
+    
+                });
+    
+            });
+    
+        }
+    
+    });
+    </script>
+{% endblock %}

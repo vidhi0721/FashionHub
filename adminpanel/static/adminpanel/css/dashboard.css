@@ -1,0 +1,179 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.dashboard{
+    display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    width:260px;
+    height:100vh;
+    position:fixed;
+    top:0;
+    left:0;
+    overflow:auto;
+    padding:25px;
+    background:linear-gradient(180deg,#6C2CF1,#E84393);
+}
+
+.logo{
+    color:#fff;
+    text-align:center;
+    margin-bottom:30px;
+    font-size:28px;
+    font-weight:700;
+}
+
+.title{
+    color:#f3f3f3;
+    margin:20px 0 10px;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.sidebar a{
+    display:block;
+    color:#fff;
+    text-decoration:none;
+    padding:13px 15px;
+    border-radius:12px;
+    margin-bottom:8px;
+    transition:.3s;
+    font-weight:500;
+}
+
+.sidebar a i{
+    width:28px;
+}
+
+.sidebar a:hover{
+    background:rgba(255,255,255,.18);
+    transform:translateX(5px);
+}
+
+.sidebar .active{
+    background:#fff;
+    color:#6C2CF1;
+    font-weight:600;
+}
+
+/* ================= MAIN ================= */
+
+.main-content{
+    margin-left:260px;
+    width:100%;
+    padding:30px;
+}
+
+/* ================= TOPBAR ================= */
+
+.topbar{
+    background:#fff;
+    border-radius:18px;
+    padding:15px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 10px 25px rgba(108,44,241,.12);
+}
+
+/* ================= SEARCH ================= */
+
+.search{
+    width:350px;
+    padding:12px 18px;
+    border:2px solid #E84393;
+    border-radius:35px;
+    outline:none;
+    transition:.3s;
+}
+
+.search:focus{
+    border-color:#6C2CF1;
+    box-shadow:0 0 12px rgba(108,44,241,.25);
+}
+
+/* ================= RIGHT ================= */
+
+.right{
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+.bell{
+    font-size:22px;
+    cursor:pointer;
+    color:#6C2CF1;
+}
+
+.admin{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.admin img{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+/* ================= WELCOME ================= */
+
+.welcome{
+    margin-top:30px;
+    background:#fff;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(108,44,241,.12);
+}
+
+/* ================= DASHBOARD CARD ================= */
+
+.dashboard-card{
+    background:#fff;
+    border:none;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(108,44,241,.12);
+    transition:.3s;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 18px 35px rgba(108,44,241,.20);
+}
+
+.dashboard-card i{
+    font-size:40px;
+    background:linear-gradient(90deg,#6C2CF1,#E84393);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:15px;
+}
+
+.dashboard-card h6{
+    color:#777;
+    margin-bottom:10px;
+    font-weight:600;
+}
+
+.dashboard-card h2,
+.dashboard-card h3{
+    font-size:34px;
+    font-weight:700;
+    color:#6C2CF1;
+}

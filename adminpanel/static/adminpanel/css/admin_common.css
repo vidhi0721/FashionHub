@@ -1,0 +1,65 @@
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f8f9fa;
+}
+
+
+/* Main Card */
+.admin-card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+
+/* Title */
+.page-title{
+    font-size:24px;
+    font-weight:600;
+    color:#198754;
+}
+
+
+/* Table */
+.admin-table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+
+.admin-table th{
+    background:#198754;
+    color:white;
+    padding:12px;
+}
+
+
+.admin-table td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+
+/* Buttons */
+.btn-admin{
+    background:#198754;
+    color:white;
+    border:none;
+    padding:8px 18px;
+    border-radius:8px;
+}
+
+
+.btn-admin:hover{
+    background:#146c43;
+}
+
+
+/* Image */
+.product-img{
+    width:70px;
+    height:70px;
+    object-fit:contain;
+}

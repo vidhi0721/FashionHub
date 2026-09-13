@@ -1,0 +1,1009 @@
+{% extends 'adminpanel/index.html' %}
+{% load static %}
+
+{% block admin_content %}
+
+<link rel="stylesheet" href="{% static 'adminpanel/css/products.css' %}">
+
+<div class="container-fluid py-4">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">Edit Product</h2>
+
+        <a href="{% url 'admin_products' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+
+    </div>
+
+
+    <!-- ================= CARD ================= -->
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h4 class="mb-0">
+                <i class="fa-solid fa-pen"></i>
+                Update Product
+            </h4>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+
+                <div class="row">
+
+
+                    <!-- ================= PRODUCT NAME ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Product Name
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="name"
+                            value="{{ product.name }}"
+                            required>
+
+                    </div>
+
+
+                    <!-- ================= MAIN CATEGORY ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Main Category
+                        </label>
+
+                        <select
+                            id="mainCategory"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                Select Main Category
+                            </option>
+
+                            {% for c in categories %}
+
+                                {% if not c.parent %}
+
+                                    <option
+                                        value="{{ c.id }}"
+                                        {% if product.category.parent_id == c.id %}
+                                            selected
+                                        {% endif %}>
+
+                                        {{ c.name }}
+
+                                    </option>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ================= SUB CATEGORY ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Sub Category
+                        </label>
+
+                        <select
+                            id="subCategory"
+                            name="category"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                Select Sub Category
+                            </option>
+
+                            {% for c in categories %}
+
+                                {% if c.parent %}
+
+                                    <option
+                                        value="{{ c.id }}"
+                                        data-parent="{{ c.parent.id }}"
+                                        {% if product.category.id == c.id %}
+                                            selected
+                                        {% endif %}>
+
+                                        {{ c.name }}
+
+                                    </option>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ================= BRAND ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Brand Name
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="brand"
+                            value="{{ product.brand.name|default:'' }}"
+                            placeholder="Enter Brand Name"
+                            required>
+
+                    </div>
+
+
+                    <!-- ================= DISCOUNT ================= -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Discount (%)
+                        </label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="discount"
+                            value="{{ product.discount }}"
+                            min="0"
+                            max="100">
+
+                    </div>
+
+
+                    <!-- ================= RATING ================= -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Rating
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            max="5"
+                            class="form-control"
+                            name="rating"
+                            value="{{ product.rating }}">
+
+                    </div>
+
+
+                    <!-- =====================================================
+                         SIZE + PRICE + STOCK
+                    ====================================================== -->
+
+                    <div class="col-md-12 mb-4">
+
+                        <label class="form-label fw-bold">
+                            Available Sizes, Price & Stock
+                        </label>
+
+                        <div class="border rounded-3 p-3 bg-light">
+
+
+                            <!-- TABLE HEADER -->
+
+                            <div class="row fw-bold mb-2">
+
+                                <div class="col-md-4">
+                                    Size
+                                </div>
+
+                                <div class="col-md-4">
+                                    Price
+                                </div>
+
+                                <div class="col-md-3">
+                                    Stock
+                                </div>
+
+                                <div class="col-md-1">
+                                </div>
+
+                            </div>
+
+
+                            <!-- SIZE CONTAINER -->
+
+                            <div id="sizeContainer">
+
+
+                                {% for item in product.sizes.all %}
+
+                                <div class="row g-2 mb-2 size-row">
+
+
+                                    <!-- SIZE -->
+
+                                    <div class="col-md-4">
+
+                                        <input
+                                            type="text"
+                                            name="size_name"
+                                            class="form-control"
+                                            value="{{ item.size }}"
+                                            placeholder="Example: L">
+
+                                    </div>
+
+
+                                    <!-- PRICE -->
+
+                                    <div class="col-md-4">
+
+                                        <input
+                                            type="number"
+                                            name="size_price"
+                                            class="form-control"
+                                            value="{{ item.price }}"
+                                            placeholder="Example: 1199"
+                                            min="0"
+                                            step="0.01">
+
+                                    </div>
+
+
+                                    <!-- STOCK -->
+
+                                    <div class="col-md-3">
+
+                                        <input
+                                            type="number"
+                                            name="size_stock"
+                                            class="form-control"
+                                            value="{{ item.stock }}"
+                                            placeholder="Example: 8"
+                                            min="0">
+
+                                    </div>
+
+
+                                    <!-- DELETE -->
+
+                                    <div class="col-md-1">
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-danger w-100"
+                                            onclick="removeSize(this)">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                {% empty %}
+
+
+                                <!-- DEFAULT EMPTY SIZE ROW -->
+
+                                <div class="row g-2 mb-2 size-row">
+
+
+                                    <div class="col-md-4">
+
+                                        <input
+                                            type="text"
+                                            name="size_name"
+                                            class="form-control"
+                                            placeholder="Example: S">
+
+                                    </div>
+
+
+                                    <div class="col-md-4">
+
+                                        <input
+                                            type="number"
+                                            name="size_price"
+                                            class="form-control"
+                                            placeholder="Example: 999"
+                                            min="0"
+                                            step="0.01">
+
+                                    </div>
+
+
+                                    <div class="col-md-3">
+
+                                        <input
+                                            type="number"
+                                            name="size_stock"
+                                            class="form-control"
+                                            placeholder="Example: 10"
+                                            min="0">
+
+                                    </div>
+
+
+                                    <div class="col-md-1">
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-danger w-100"
+                                            onclick="removeSize(this)">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- ADD SIZE -->
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary btn-sm mt-2"
+                                onclick="addSize()">
+
+                                <i class="fa-solid fa-plus"></i>
+                                Add Size
+
+                            </button>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================= COLOR ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Available Colors
+                        </label>
+
+                        <input
+                            type="text"
+                            name="color"
+                            class="form-control"
+                            value="{{ product.color }}"
+                            placeholder="Example: Black, Red, Blue">
+
+                        <small class="text-muted">
+                            Separate colors with comma
+                        </small>
+
+                    </div>
+
+
+                    <!-- ================= STATUS ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Status
+                        </label>
+
+                        <select
+                            class="form-select"
+                            name="status">
+
+                            <option
+                                value="In Stock"
+                                {% if product.status == "In Stock" %}
+                                    selected
+                                {% endif %}>
+
+                                In Stock
+
+                            </option>
+
+                            <option
+                                value="Out of Stock"
+                                {% if product.status == "Out of Stock" %}
+                                    selected
+                                {% endif %}>
+
+                                Out of Stock
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ================= CURRENT IMAGE ================= -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Current Image
+                        </label>
+
+                        <br>
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                class="img-thumbnail"
+                                style="
+                                    width:150px;
+                                    height:150px;
+                                    object-fit:contain;
+                                ">
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ================= CHANGE IMAGE ================= -->
+
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Change Image
+                        </label>
+
+                        <input
+                            type="file"
+                            class="form-control"
+                            name="image">
+
+                    </div>
+
+
+                    <!-- ================= SHORT DESCRIPTION ================= -->
+
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Short Description
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            rows="3"
+                            name="short_description">{{ product.short_description }}</textarea>
+
+                    </div>
+
+
+                    <!-- ================= DESCRIPTION ================= -->
+
+                    <div class="col-md-12 mb-4">
+
+                        <label class="form-label fw-bold">
+                            Description
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            rows="6"
+                            name="description">{{ product.description }}</textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =====================================================
+     OFFERS
+====================================================== -->
+
+<div class="col-md-12 mb-4">
+
+    <label class="form-label fw-bold">
+        🎁 Product Offers
+    </label>
+
+    <div id="offersContainer">
+
+        {% for offer in product.offers.all %}
+
+        <div class="input-group mb-2 offer-row">
+
+            <input
+                type="text"
+                name="offers"
+                class="form-control"
+                value="{{ offer.offer }}"
+                placeholder="Example: 10% Extra Discount">
+
+            <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="removeField(this)">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+        </div>
+
+        {% empty %}
+
+        <div class="input-group mb-2 offer-row">
+
+            <input
+                type="text"
+                name="offers"
+                class="form-control"
+                placeholder="Example: 10% Extra Discount">
+
+            <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="removeField(this)">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        onclick="addOffer()">
+
+        <i class="fa-solid fa-plus"></i>
+        Add Offer
+
+    </button>
+
+</div>
+
+
+                <!-- =====================================================
+     HIGHLIGHTS
+====================================================== -->
+
+<div class="col-md-12 mb-4">
+
+    <label class="form-label fw-bold">
+        ✔ Product Highlights
+    </label>
+
+    <div id="highlightsContainer">
+
+        {% for highlight in product.highlights.all %}
+
+        <div class="input-group mb-2 highlight-row">
+
+            <input
+                type="text"
+                name="highlights"
+                class="form-control"
+                value="{{ highlight.highlight }}"
+                placeholder="Example: Premium Quality">
+
+            <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="removeField(this)">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+        </div>
+
+        {% empty %}
+
+        <div class="input-group mb-2 highlight-row">
+
+            <input
+                type="text"
+                name="highlights"
+                class="form-control"
+                placeholder="Example: Premium Quality">
+
+            <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="removeField(this)">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        onclick="addHighlight()">
+
+        <i class="fa-solid fa-plus"></i>
+        Add Highlight
+
+    </button>
+
+</div>
+
+                <!-- ================= UPDATE BUTTON ================= -->
+
+                <div class="text-end mt-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary px-5">
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        Update Product
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     JAVASCRIPT
+============================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* =========================================================
+       CATEGORY
+    ========================================================= */
+
+    const mainCategory =
+        document.getElementById("mainCategory");
+
+    const subCategory =
+        document.getElementById("subCategory");
+
+
+    function filterSubCategories() {
+
+        if (!mainCategory || !subCategory) {
+            return;
+        }
+
+        const selectedMain =
+            mainCategory.value;
+
+        const options =
+            subCategory.querySelectorAll("option");
+
+
+        options.forEach(function (option) {
+
+            if (option.value === "") {
+
+                option.style.display = "block";
+
+            }
+
+            else if (
+                option.dataset.parent === selectedMain
+            ) {
+
+                option.style.display = "block";
+
+            }
+
+            else {
+
+                option.style.display = "none";
+
+            }
+
+        });
+
+    }
+
+
+    filterSubCategories();
+
+
+    if (mainCategory) {
+
+        mainCategory.addEventListener(
+            "change",
+            function () {
+
+                if (subCategory) {
+                    subCategory.value = "";
+                }
+
+                filterSubCategories();
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       ADD OFFER
+    ========================================================= */
+
+    window.addOffer = function () {
+
+        const container =
+            document.getElementById(
+                "offersContainer"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "input-group mb-2";
+
+
+        div.innerHTML = `
+
+            <input
+                type="text"
+                name="offers"
+                class="form-control"
+                placeholder="Example: 10% Extra Discount">
+
+            <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="removeField(this)">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+        `;
+
+
+        container.appendChild(div);
+
+    };
+
+
+    /* =========================================================
+       ADD HIGHLIGHT
+    ========================================================= */
+
+    window.addHighlight = function () {
+
+        const container =
+            document.getElementById(
+                "highlightsContainer"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "input-group mb-2";
+
+
+        div.innerHTML = `
+
+            <input
+                type="text"
+                name="highlights"
+                class="form-control"
+                placeholder="Example: Premium Quality">
+
+            <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="removeField(this)">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+        `;
+
+
+        container.appendChild(div);
+
+    };
+
+
+    /* =========================================================
+       ADD SIZE
+    ========================================================= */
+
+    window.addSize = function () {
+
+        const container =
+            document.getElementById(
+                "sizeContainer"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "row g-2 mb-2 size-row";
+
+
+        div.innerHTML = `
+
+            <div class="col-md-4">
+
+                <input
+                    type="text"
+                    name="size_name"
+                    class="form-control"
+                    placeholder="Example: XL">
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <input
+                    type="number"
+                    name="size_price"
+                    class="form-control"
+                    placeholder="Example: 1299"
+                    min="0"
+                    step="0.01">
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <input
+                    type="number"
+                    name="size_stock"
+                    class="form-control"
+                    placeholder="Example: 5"
+                    min="0">
+
+            </div>
+
+
+            <div class="col-md-1">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-danger w-100"
+                    onclick="removeSize(this)">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(div);
+
+    };
+
+
+    /* =========================================================
+       REMOVE SIZE
+    ========================================================= */
+
+    window.removeSize = function (button) {
+
+        if (!button) {
+            return;
+        }
+
+
+        const row =
+            button.closest(".size-row");
+
+
+        if (row) {
+            row.remove();
+        }
+
+    };
+
+
+    /* =========================================================
+       REMOVE OFFER / HIGHLIGHT
+    ========================================================= */
+
+    window.removeField = function (button) {
+
+        if (!button) {
+            return;
+        }
+
+
+        const field =
+            button.closest(".input-group");
+
+
+        if (field) {
+            field.remove();
+        }
+
+    };
+
+
+});
+
+</script>
+
+
+{% endblock %}

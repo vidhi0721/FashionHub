@@ -1,0 +1,689 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="shop-page">
+
+    <div class="container py-4">
+
+
+        <!-- ================= BREADCRUMB ================= -->
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a href="{% url 'home' %}">
+                        Home
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Shop
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <!-- ================= TITLE + SORT ================= -->
+
+        <div class="row mb-3 align-items-center">
+
+            <div class="col-lg-8">
+
+                <h4 class="fw-bold mb-0">
+                    Shop Products
+                </h4>
+
+                <small class="text-muted">
+                    Find your favourite products
+                </small>
+
+            </div>
+
+
+            <div class="col-lg-4 d-flex justify-content-end">
+
+                <select 
+                name="sort" 
+                class="form-select sort-select"
+                onchange="window.location.href='?sort=' + this.value;">
+            
+                <option value="newest"
+                    {% if selected_sort == "newest" %}selected{% endif %}>
+                    Newest
+                </option>
+            
+                <option value="price_low"
+                    {% if selected_sort == "price_low" %}selected{% endif %}>
+                    Price: Low to High
+                </option>
+            
+                <option value="price_high"
+                    {% if selected_sort == "price_high" %}selected{% endif %}>
+                    Price: High to Low
+                </option>
+            
+                <option value="rating"
+                    {% if selected_sort == "rating" %}selected{% endif %}>
+                    Highest Rated
+                </option>
+            
+                <option value="az"
+                    {% if selected_sort == "az" %}selected{% endif %}>
+                    A - Z
+                </option>
+            
+                <option value="za"
+                    {% if selected_sort == "za" %}selected{% endif %}>
+                    Z - A
+                </option>
+            
+            </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+
+            <!-- ================= FILTER ================= -->
+
+            <div class="col-lg-3 mb-4">
+
+                <form method="GET">
+
+                    <div class="filter-card shadow-sm p-3">
+
+
+                        <h4 class="mb-3">
+                            Filters
+                        </h4>
+
+
+                        <!-- CATEGORY -->
+
+                        <!-- ================= CATEGORY ================= -->
+
+<h6>
+    Category
+</h6>
+
+<select
+    name="category"
+    class="form-select form-select-sm category-select">
+
+    <option value="">
+        All Categories
+    </option>
+
+
+    {% for cat in categories %}
+
+        {% if not cat.parent %}
+
+            <optgroup label="{{ cat.name }}">
+
+                {% for subcat in categories %}
+
+                    {% if subcat.parent_id == cat.id %}
+
+                        <option
+                            value="{{ subcat.id }}"
+                            {% if selected_category == subcat.id|stringformat:"s" %}
+                                selected
+                            {% endif %}>
+
+                            {{ subcat.name }}
+
+                        </option>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </optgroup>
+
+        {% endif %}
+
+    {% endfor %}
+
+</select>
+
+
+                        <hr>
+
+
+                        <!-- PRICE -->
+
+                        <h6>
+                            Price
+                        </h6>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="price"
+                                value="500">
+
+                            <label class="form-check-label">
+                                Under ₹500
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="price"
+                                value="1000">
+
+                            <label class="form-check-label">
+                                Under ₹1000
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="price"
+                                value="5000">
+
+                            <label class="form-check-label">
+                                Under ₹5000
+                            </label>
+
+                        </div>
+
+
+                        <hr>
+
+
+                        <!-- RATING -->
+
+                        <h6>
+                            Rating
+                        </h6>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="rating"
+                                value="4">
+
+                            <label class="form-check-label">
+                                4★ & Above
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="rating"
+                                value="3">
+
+                            <label class="form-check-label">
+                                3★ & Above
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="rating"
+                                value="2">
+
+                            <label class="form-check-label">
+                                2★ & Above
+                            </label>
+
+                        </div>
+
+
+                        <hr>
+
+
+                        <!-- DISCOUNT -->
+
+                        <h6>
+                            Discount
+                        </h6>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="discount"
+                                value="10">
+
+                            <label class="form-check-label">
+                                10%+
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="discount"
+                                value="20">
+
+                            <label class="form-check-label">
+                                20%+
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="discount"
+                                value="30">
+
+                            <label class="form-check-label">
+                                30%+
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="discount"
+                                value="50">
+
+                            <label class="form-check-label">
+                                50%+
+                            </label>
+
+                        </div>
+
+
+                        <hr>
+
+
+                        <!-- APPLY -->
+
+                        <button
+                            type="submit"
+                            class="btn apply-btn w-100">
+
+                            Apply Filters
+
+                        </button>
+
+
+                        <!-- CLEAR -->
+
+                        <a
+                            href="{% url 'shop' %}"
+                            class="btn btn-outline-secondary clear-btn w-100 mt-2">
+
+                            Clear Filters
+
+                        </a>
+
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- ================= PRODUCTS ================= -->
+
+            <div class="col-lg-9 ps-lg-3">
+
+                <div class="row g-3">
+
+
+                    {% for p in products %}
+
+
+                        <!-- 3 PRODUCTS PER ROW -->
+
+                        <div class="col-lg-4 col-md-4 col-sm-6">
+
+
+                        <div class="card product-card h-100 shadow-sm">
+
+
+                            <!-- PRODUCT IMAGE -->
+
+                            <a
+                                href="{% url 'product_details' p.id %}"
+                                class="text-decoration-none">
+
+                                <div class="product-image-box">
+
+
+                                    {% if p.discount > 0 %}
+
+                                    <span class="discount-badge">
+
+                                        {{ p.discount }}% OFF
+
+                                    </span>
+
+                                    {% endif %}
+
+
+                                    {% if p.image %}
+
+                                    <img
+                                        src="{{ p.image.url }}"
+                                        alt="{{ p.name }}">
+
+                                    {% endif %}
+
+
+                                </div>
+
+                            </a>
+
+
+                            <!-- PRODUCT BODY -->
+
+                            <div class="product-body">
+
+
+                                <!-- NAME -->
+
+                                <h6 class="product-name">
+
+                                    {{ p.name }}
+
+                                </h6>
+
+
+
+                                <!-- RATING -->
+
+                                <div class="rating">
+
+                                    ⭐
+
+                                    <strong>
+                                        {{ p.rating }}
+                                    </strong>
+
+                                    <span class="text-muted">
+                                        / 5
+                                    </span>
+
+                                </div>
+
+
+                                <!-- PRICE -->
+
+                                <div>
+
+                                    <span class="product-price">
+
+                                        ₹{{ p.price }}
+
+                                    </span>
+
+                                </div>
+
+
+                                <!-- STOCK -->
+
+                                {% if p.stock > 0 %}
+
+                                <div class="stock-text text-success">
+
+                                    ✔ In Stock
+
+                                </div>
+
+                                {% else %}
+
+                                <div class="stock-text text-danger">
+
+                                    ✖ Out of Stock
+
+                                </div>
+
+                                {% endif %}
+
+
+                                <!-- ADD TO CART -->
+
+                                {% if p.stock > 0 %}
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'add_to_cart' p.id %}">
+
+                                    {% csrf_token %}
+
+
+                                    <input
+                                        type="hidden"
+                                        name="quantity"
+                                        value="1">
+
+
+                                    <button
+                                        type="submit"
+                                        class="cart-btn">
+
+                                        <i class="fa-solid fa-cart-shopping"></i>
+
+                                        Add to Cart
+
+                                    </button>
+
+                                </form>
+
+                                {% else %}
+
+                                <button
+                                    type="button"
+                                    class="cart-btn"
+                                    disabled
+                                    style="background:#aaa;">
+
+                                    Out of Stock
+
+                                </button>
+
+                                {% endif %}
+
+
+                                <!-- VIEW DETAILS -->
+
+                                <a
+                                    href="{% url 'product_details' p.id %}"
+                                    class="view-btn">
+
+                                    View Details
+
+                                </a>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {% empty %}
+
+
+                    <div class="col-12">
+
+                        <div class="alert alert-warning text-center">
+
+                            No Products Found
+
+                        </div>
+
+                    </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+       <!-- ================= PAGINATION ================= -->
+
+{% if page_obj.has_other_pages %}
+
+<nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+        <!-- PREVIOUS -->
+
+        {% if page_obj.has_previous %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ page_obj.previous_page_number }}&search={{ search }}&category={{ selected_category }}&price={{ selected_price }}&rating={{ selected_rating }}&discount={{ selected_discount }}&sort={{ selected_sort }}">
+
+                Previous
+
+            </a>
+
+        </li>
+
+        {% else %}
+
+        <li class="page-item disabled">
+
+            <span class="page-link">
+                Previous
+            </span>
+
+        </li>
+
+        {% endif %}
+
+
+        <!-- PAGE NUMBERS -->
+
+        {% for num in page_obj.paginator.page_range %}
+
+            {% if page_obj.number == num %}
+
+            <li class="page-item active">
+
+                <span class="page-link">
+                    {{ num }}
+                </span>
+
+            </li>
+
+            {% else %}
+
+            <li class="page-item">
+
+                <a
+                    class="page-link"
+                    href="?page={{ num }}&search={{ search }}&category={{ selected_category }}&price={{ selected_price }}&rating={{ selected_rating }}&discount={{ selected_discount }}&sort={{ selected_sort }}">
+
+                    {{ num }}
+
+                </a>
+
+            </li>
+
+            {% endif %}
+
+        {% endfor %}
+
+
+        <!-- NEXT -->
+
+        {% if page_obj.has_next %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ page_obj.next_page_number }}&search={{ search }}&category={{ selected_category }}&price={{ selected_price }}&rating={{ selected_rating }}&discount={{ selected_discount }}&sort={{ selected_sort }}">
+
+                Next
+
+            </a>
+
+        </li>
+
+        {% else %}
+
+        <li class="page-item disabled">
+
+            <span class="page-link">
+                Next
+            </span>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+{% endif %}
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'adminpanel/index.html' %}
+{% load static %}
+
+{% block admin_content %}
+
+<link rel="stylesheet" href="{% static 'adminpanel/css/products.css' %}">
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+            <i class="fa-solid fa-layer-group"></i>
+            Categories
+        </h2>
+
+        <a href="{% url 'add_category' %}" class="btn btn-success">
+
+            <i class="fa-solid fa-plus"></i>
+            Add Category
+
+        </a>
+
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show">
+
+            {{ message }}
+
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-body">
+
+            <table class="table align-middle">
+
+                <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Image</th>
+
+                    <th>Category Name</th>
+
+                    <th width="180">Action</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for c in categories %}
+
+                <tr>
+
+                    <td>{{ c.id }}</td>
+
+                    <td>
+
+                        {% if c.image %}
+                            <img src="{{ c.image.url }}"
+                                 width="70"
+                                 class="rounded">
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <strong>{{ c.name }}</strong>
+
+                    </td>
+
+                    <td>
+
+                        <a href="{% url 'edit_category' c.id %}"
+                           class="btn btn-primary btn-sm">
+
+                            <i class="fa fa-pen"></i>
+
+                        </a>
+
+                        <a href="{% url 'delete_category' c.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete Category?')">
+
+                            <i class="fa fa-trash"></i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="4" class="text-center">
+
+                        No Categories Found
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+<section class="edit-profile-page">
+
+    <div class="container">
+
+        <div class="edit-profile-card">
+
+
+            <!-- HEADING -->
+
+            <div class="edit-profile-title">
+
+                <div class="profile-avatar-small">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <h1>
+                    Edit Profile
+                </h1>
+
+                <p>
+                    Update your account information
+                </p>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- FIRST NAME -->
+
+                <div class="mb-3">
+
+                    <label>
+                        First Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="first_name"
+                        class="form-control"
+                        value="{{ user.first_name }}"
+                        placeholder="Enter first name">
+
+                </div>
+
+
+                <!-- LAST NAME -->
+
+                <div class="mb-3">
+
+                    <label>
+                        Last Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="last_name"
+                        class="form-control"
+                        value="{{ user.last_name }}"
+                        placeholder="Enter last name">
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="mb-4">
+
+                    <label>
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ user.email }}"
+                        placeholder="Enter email address"
+                        required>
+
+                </div>
+
+                    <!-- NEW PASSWORD -->
+
+                    <div class="mb-3">
+
+                        <label>
+                            New Password
+                        </label>
+
+                        <input
+                            type="password"
+                            name="new_password"
+                            class="form-control"
+                            placeholder="Leave blank if you don't want to change password">
+
+                    </div>
+
+
+                    <!-- CONFIRM PASSWORD -->
+
+                    <div class="mb-4">
+
+                        <label>
+                            Confirm New Password
+                        </label>
+
+                        <input
+                            type="password"
+                            name="confirm_password"
+                            class="form-control"
+                            placeholder="Confirm your new password">
+
+                    </div>
+                <!-- SAVE -->
+
+                <button
+                    type="submit"
+                    class="save-profile-btn">
+
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                    Save Changes
+
+                </button>
+
+
+                <!-- CANCEL -->
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="cancel-btn">
+
+                    Cancel
+
+                </a>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

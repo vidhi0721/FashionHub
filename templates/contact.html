@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- =========================================================
+     CONTACT PAGE
+========================================================= -->
+
+<section class="contact-page">
+
+    <div class="container py-5">
+
+        <!-- PAGE HEADER -->
+
+        <div class="text-center contact-header">
+
+            <h2 class="section-title">
+                Contact Us
+            </h2>
+
+            <p class="section-subtitle">
+                We'd love to hear from you. Get in touch with us.
+            </p>
+
+        </div>
+
+
+        <div class="row g-5 align-items-stretch">
+
+
+            <!-- =================================================
+                 CONTACT INFORMATION
+            ================================================== -->
+
+            <div class="col-lg-5">
+
+                <div class="contact-info-card">
+
+                    <span class="contact-badge">
+                        💬 GET IN TOUCH
+                    </span>
+
+                    <p class="contact-description">
+                        Have a question, suggestion, or need help
+                        with your order? Our team is here to help you.
+                    </p>
+
+
+                    <!-- ADDRESS -->
+
+                    <div class="contact-item">
+
+                        <div class="contact-icon">
+                            📍
+                        </div>
+
+                        <div>
+                            <h5>Address</h5>
+                            <p>
+                                Ahmedabad, Gujarat
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="contact-item">
+
+                        <div class="contact-icon">
+                            📞
+                        </div>
+
+                        <div>
+                            <h5>Phone</h5>
+                            <p>
+                                +91 9876543210
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="contact-item">
+
+                        <div class="contact-icon">
+                            📧
+                        </div>
+
+                        <div>
+                            <h5>Email</h5>
+                            <p>
+                                support@fashionhub.com
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONTACT FORM
+            ================================================== -->
+
+            <div class="col-lg-7">
+
+                <div class="contact-form-card">
+
+                    <h3>
+                        Send Us a Message
+                    </h3>
+
+                    <p>
+                        Fill out the form below and we'll get back
+                        to you as soon as possible.
+                    </p>
+
+
+                    <form>
+
+                        <!-- NAME -->
+
+                        <div class="mb-3">
+
+                            <label class="contact-label">
+                                Your Name
+                            </label>
+
+                            <input type="text"
+                                   class="form-control contact-input"
+                                   placeholder="Enter your name">
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="mb-3">
+
+                            <label class="contact-label">
+                                Your Email
+                            </label>
+
+                            <input type="email"
+                                   class="form-control contact-input"
+                                   placeholder="Enter your email">
+
+                        </div>
+
+
+                        <!-- SUBJECT -->
+
+                        <div class="mb-3">
+
+                            <label class="contact-label">
+                                Subject
+                            </label>
+
+                            <input type="text"
+                                   class="form-control contact-input"
+                                   placeholder="Enter subject">
+
+                        </div>
+
+
+                        <!-- MESSAGE -->
+
+                        <div class="mb-4">
+
+                            <label class="contact-label">
+                                Message
+                            </label>
+
+                            <textarea class="form-control contact-input"
+                                      rows="5"
+                                      placeholder="Write your message"></textarea>
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+
+                        <button type="submit"
+                                class="contact-submit-btn">
+
+                            <i class="fa-solid fa-paper-plane"></i>
+
+                            Send Message
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

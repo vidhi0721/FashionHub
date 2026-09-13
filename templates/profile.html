@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="profile-page">
+
+    <div class="container">
+
+        <!-- PAGE HEADING -->
+
+        <div class="text-center mb-5">
+
+            <h1 class="fw-bold">
+                👤 My Profile
+            </h1>
+
+            <p class="text-muted">
+                Manage your account information
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- PROFILE DETAILS -->
+
+            <div class="col-lg-7">
+
+                <div class="profile-card">
+
+
+                    <!-- PROFILE HEADER -->
+
+                    <div class="profile-header">
+
+                        <div class="profile-avatar">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </div>
+
+
+                        <h2 class="profile-name">
+
+                            {{ user.first_name|default:user.username }}
+
+                            {{ user.last_name }}
+
+                        </h2>
+
+
+                        <p class="profile-username">
+
+                            @{{ user.username }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- PROFILE INFORMATION -->
+
+                    <div class="profile-info">
+
+
+                        <!-- NAME -->
+
+                        <div class="info-item">
+
+                            <div class="d-flex align-items-center">
+
+                                <i class="fa-solid fa-user"></i>
+
+                                <div>
+
+                                    <div class="info-label">
+                                        Full Name
+                                    </div>
+
+                                    <p class="info-value">
+
+                                        {{ user.first_name }}
+                                        {{ user.last_name }}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="info-item">
+
+                            <div class="d-flex align-items-center">
+
+                                <i class="fa-solid fa-envelope"></i>
+
+                                <div>
+
+                                    <div class="info-label">
+                                        Email Address
+                                    </div>
+
+                                    <p class="info-value">
+
+                                        {{ user.email }}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- USERNAME -->
+
+                        <div class="info-item">
+
+                            <div class="d-flex align-items-center">
+
+                                <i class="fa-solid fa-at"></i>
+
+                                <div>
+
+                                    <div class="info-label">
+                                        Username
+                                    </div>
+
+                                    <p class="info-value">
+
+                                        {{ user.username }}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- JOINED -->
+
+                        <div class="info-item">
+
+                            <div class="d-flex align-items-center">
+
+                                <i class="fa-solid fa-calendar"></i>
+
+                                <div>
+
+                                    <div class="info-label">
+                                        Member Since
+                                    </div>
+
+                                    <p class="info-value">
+
+                                        {{ user.date_joined|date:"d M Y" }}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- EDIT BUTTON -->
+
+                    <div class="text-center mt-4">
+
+                        <a href="{% url 'edit_profile' %}"
+                            class="edit-btn text-decoration-none d-inline-block">
+
+                                <i class="fa-solid fa-pen-to-square me-2"></i>
+
+                                Edit Profile
+
+                         </a>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- PROFILE MENU -->
+
+            <div class="col-lg-5">
+
+                <div class="profile-menu-card">
+
+
+                    <h3 class="profile-menu-title">
+
+                        Account Settings
+
+                    </h3>
+
+
+                    <!-- MY ORDERS -->
+
+                    <a href="{% url 'my_orders' %}"
+                       class="profile-menu-link">
+
+                        <span>
+
+                            <i class="fa-solid fa-box"></i>
+
+                            My Orders
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <!-- WISHLIST -->
+
+                    <a href="{% url 'watchlist' %}"
+                       class="profile-menu-link">
+
+                        <span>
+
+                            <i class="fa-solid fa-heart"></i>
+
+                            Wishlist
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <!-- LOGOUT -->
+
+                    <a href="{% url 'logout' %}"
+                       class="profile-menu-link text-danger">
+
+                        <span>
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Logout
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

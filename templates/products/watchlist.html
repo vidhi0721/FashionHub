@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="watchlist-page">
+
+
+<div class="container py-5">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="watchlist-title">
+                My Watchlist ❤️
+            </h2>
+
+            <p class="watchlist-subtitle">
+                Products you saved for later
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= WATCHLIST PRODUCTS ================= -->
+
+    {% if watchlist_items %}
+
+    <div class="row g-4">
+
+        {% for item in watchlist_items %}
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="watchlist-card h-100">
+
+                <!-- PRODUCT IMAGE -->
+
+                {% if item.product.image %}
+
+                <div class="watchlist-image">
+
+                    <img
+                        src="{{ item.product.image.url }}"
+                        alt="{{ item.product.name }}"
+                    >
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- PRODUCT DETAILS -->
+
+                <div class="watchlist-body">
+
+                    <h5 class="watchlist-product-name">
+
+                        {{ item.product.name }}
+
+                    </h5>
+
+
+                    <p class="watchlist-description">
+
+                        {{ item.product.short_description }}
+
+                    </p>
+
+
+                    <div class="watchlist-actions">
+
+                        <a 
+                            href="{% url 'product_details' item.product.id %}" 
+                            class="watchlist-view-btn"
+                        >
+                            View Product
+                        </a>
+                    
+                        <a 
+                            href="{% url 'remove_from_watchlist' item.product.id %}"
+                            class="watchlist-remove-btn"
+                        >
+                            Remove ❤️
+                        </a>
+                    
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ================= EMPTY WATCHLIST ================= -->
+
+    {% else %}
+
+    <div class="watchlist-empty">
+
+        <div class="watchlist-empty-icon">
+            ♡
+        </div>
+
+
+        <h4 class="watchlist-empty-title">
+
+            Your Watchlist is Empty
+
+        </h4>
+
+
+        <p class="watchlist-empty-text">
+
+            Save products you love by clicking the heart icon.
+
+        </p>
+
+
+        <a
+            href="{% url 'shop' %}"
+            class="watchlist-shopping-btn"
+        >
+
+            Continue Shopping
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,1055 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="product-page">
+
+    <div class="container py-3">
+
+        <!-- ================= BREADCRUMB ================= -->
+
+        <div class="breadcrumb-custom">
+            <a href="{% url 'home' %}">Home</a>
+            <span class="text-muted mx-2">/</span>
+
+            <a href="{% url 'shop' %}">Shop</a>
+            <span class="text-muted mx-2">/</span>
+
+            <span class="text-muted">{{ product.name }}</span>
+        </div>
+
+
+        <!-- ================= MAIN PRODUCT ================= -->
+
+        <div class="row g-4 main-product-row">
+
+            <!-- ================= PRODUCT IMAGE ================= -->
+
+            <div class="col-lg-5">
+
+                <div class="product-image-card">
+
+                    <span class="new-badge">
+                        NEW
+                    </span>
+
+                    <a href="{% url 'add_to_watchlist' product.id %}"
+                       class="watchlist-heart"
+                       title="Add to Watchlist">
+
+                        <i class="fa-regular fa-heart"></i>
+
+                    </a>
+
+                    {% if product.image %}
+
+                        <img src="{{ product.image.url }}"
+                             alt="{{ product.name }}">
+
+                    {% else %}
+
+                        <div class="text-muted">
+                            No Image Available
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= PRODUCT INFORMATION ================= -->
+
+            <div class="col-lg-4">
+
+                <div class="product-info">
+
+                    <!-- Category -->
+
+                    <div class="product-category">
+                        {{ product.category.name }}
+                    </div>
+
+
+                    <!-- Product Name -->
+
+                    <h1 class="product-title">
+                        {{ product.name }}
+                    </h1>
+
+
+                    <!-- Brand -->
+
+                    {% if product.brand %}
+
+                        <div class="product-category">
+                            Brand:
+                            <strong>
+                                {{ product.brand.name }}
+                            </strong>
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- Rating -->
+
+                    <div class="rating-box">
+
+                        <span class="rating-star">
+                            ⭐
+                        </span>
+
+                        <strong>
+                            {{ product.rating }}
+                        </strong>
+
+                        <span class="text-muted">
+                            / 5
+                        </span>
+
+                    </div>
+
+
+                    <!-- Price -->
+
+                    <div class="price-box">
+
+                        <span class="product-price"
+                              id="productPrice">
+
+                            ₹{{ product.price }}
+
+                        </span>
+
+                        {% if product.discount > 0 %}
+
+                            <span class="discount-badge">
+
+                                {{ product.discount }}% OFF
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="tax-text">
+                        Inclusive of all taxes
+                    </div>
+
+
+                    <hr class="product-divider">
+
+
+                    <!-- ================= ADD TO CART FORM ================= -->
+
+                    <form method="POST"
+                          action="{% url 'add_to_cart' product.id %}">
+
+                        {% csrf_token %}
+
+
+                        <!-- ================= SIZE ================= -->
+
+                        {% if product.sizes.exists %}
+
+                            <div class="option-section">
+
+                                <div class="option-title">
+                                    Select Size
+                                </div>
+
+                                <div class="d-flex gap-2 flex-wrap">
+
+                                    {% for item in product.sizes.all %}
+
+                                        <input type="radio"
+                                               class="btn-check size-option"
+                                               name="size"
+                                               id="size{{ forloop.counter }}"
+                                               value="{{ item.size }}"
+                                               data-price="{{ item.price }}"
+                                               data-stock="{{ item.stock }}"
+                                               {% if forloop.first %}
+                                                   checked
+                                               {% endif %}>
+
+                                        <label class="btn btn-outline-dark size-btn"
+                                               for="size{{ forloop.counter }}">
+
+                                            {{ item.size }}
+
+                                        </label>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- ================= COLOR ================= -->
+
+                        {% if colors %}
+
+                            <div class="option-section">
+
+                                <div class="option-title">
+                                    Select Color
+                                </div>
+
+                                <div class="d-flex gap-2 flex-wrap">
+
+                                    {% for color in colors %}
+
+                                        <input type="radio"
+                                               class="btn-check"
+                                               name="color"
+                                               id="color{{ forloop.counter }}"
+                                               value="{{ color }}"
+                                               {% if forloop.first %}
+                                                   checked
+                                               {% endif %}>
+
+                                        <label class="btn btn-outline-dark color-btn"
+                                               for="color{{ forloop.counter }}">
+
+                                            {{ color }}
+
+                                        </label>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- ================= QUANTITY ================= -->
+
+                        <div class="quantity-row">
+
+                            <div class="option-title mb-0">
+                                Quantity
+                            </div>
+
+                            <div class="quantity-box">
+
+                                <button type="button"
+                                        onclick="decreaseQty()">
+
+                                    −
+
+                                </button>
+
+                                <input type="number"
+                                       id="quantity"
+                                       name="quantity"
+                                       value="1"
+                                       min="1"
+                                       max="{{ product.stock }}">
+
+                                <button type="button"
+                                        onclick="increaseQty()">
+
+                                    +
+
+                                </button>
+
+                            </div>
+
+                            <span id="stockStatus"
+                                  class="stock-status">
+                            </span>
+
+                        </div>
+
+
+                        <!-- ================= ACTION BUTTONS ================= -->
+
+                        <div id="productActions">
+
+                            {% if product.stock > 0 %}
+
+                                <div class="product-actions">
+
+                                    <button type="submit"
+                                            class="add-cart-btn">
+
+                                        <i class="fa-solid fa-cart-shopping me-2"></i>
+
+                                        Add To Cart
+
+                                    </button>
+
+
+                                    <a href="{% url 'checkout' %}"
+                                       class="shop-now-btn text-center text-decoration-none">
+
+                                        <i class="fa-solid fa-bag-shopping me-2"></i>
+
+                                        Buy Now
+
+                                    </a>
+
+                                </div>
+
+                            {% else %}
+
+                                <button type="button"
+                                        class="btn btn-secondary w-100 py-2"
+                                        disabled>
+
+                                    Out of Stock
+
+                                </button>
+
+                            {% endif %}
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= RIGHT SIDE ================= -->
+
+            <div class="col-lg-3">
+
+
+                <!-- OFFERS -->
+
+                <div class="side-card">
+
+                    <div class="card-body">
+
+                        <div class="side-title">
+                            🎁 Offers
+                        </div>
+
+                        <ul class="side-list">
+
+                            {% for offer in offers %}
+
+                                <li>
+                                    {{ offer.offer }}
+                                </li>
+
+                            {% empty %}
+
+                                <li>
+                                    No offers available
+                                </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HIGHLIGHTS -->
+
+                <div class="side-card">
+
+                    <div class="card-body">
+
+                        <div class="side-title">
+                            ✔ Product Highlights
+                        </div>
+
+                        <ul class="side-list">
+
+                            {% for highlight in highlights %}
+
+                                <li>
+                                    {{ highlight.highlight }}
+                                </li>
+
+                            {% empty %}
+
+                                <li>
+                                    Original Product
+                                </li>
+
+                                <li>
+                                    Easy Returns
+                                </li>
+
+                                <li>
+                                    Secure Payment
+                                </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SERVICES -->
+
+                <div class="services-card">
+
+                    <div class="service-item">
+
+                        <div class="service-icon">
+                            🚚
+                        </div>
+
+                        Free Delivery
+
+                    </div>
+
+
+                    <div class="service-item">
+
+                        <div class="service-icon">
+                            🔄
+                        </div>
+
+                        7 Days Return
+
+                    </div>
+
+
+                    <div class="service-item">
+
+                        <div class="service-icon">
+                            🔒
+                        </div>
+
+                        Secure Payment
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= PRODUCT DETAILS ================= -->
+
+        <div class="details-card mt-4">
+
+            <ul class="nav nav-tabs"
+                id="productTab"
+                role="tablist">
+
+
+                <!-- DESCRIPTION -->
+
+                <li class="nav-item">
+
+                    <button class="nav-link active"
+                            data-bs-toggle="tab"
+                            data-bs-target="#description"
+                            type="button">
+
+                        Description
+
+                    </button>
+
+                </li>
+
+
+                <!-- SPECIFICATIONS -->
+
+                <li class="nav-item">
+
+                    <button class="nav-link"
+                            data-bs-toggle="tab"
+                            data-bs-target="#specification"
+                            type="button">
+
+                        Specifications
+
+                    </button>
+
+                </li>
+
+
+                <!-- REVIEWS -->
+
+                <li class="nav-item">
+
+                    <button class="nav-link"
+                            data-bs-toggle="tab"
+                            data-bs-target="#review"
+                            type="button">
+
+                        Reviews
+
+                    </button>
+
+                </li>
+
+            </ul>
+
+
+            <div class="tab-content details-content">
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="tab-pane fade show active"
+                     id="description">
+
+                    <h5 class="fw-bold mb-3">
+                        Product Description
+                    </h5>
+
+                    <p>
+                        {{ product.description }}
+                    </p>
+
+                </div>
+
+
+                <!-- SPECIFICATIONS -->
+
+                <div class="tab-pane fade"
+                     id="specification">
+
+                    <div class="table-responsive">
+
+                        <table class="table spec-table align-middle">
+
+                            <tr>
+
+                                <th>
+                                    Product Name
+                                </th>
+
+                                <td>
+                                    {{ product.name }}
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <td>
+                                    {{ product.category.name }}
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <th>
+                                    Brand
+                                </th>
+
+                                <td>
+                                    {{ product.brand.name|default:"Not specified" }}
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <th>
+                                    Price
+                                </th>
+
+                                <td>
+                                    ₹{{ product.price }}
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <th>
+                                    Rating
+                                </th>
+
+                                <td>
+                                    ⭐ {{ product.rating }}
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <th>
+                                    Discount
+                                </th>
+
+                                <td>
+                                    {{ product.discount }}%
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <th>
+                                    Available Sizes
+                                </th>
+
+                                <td>
+
+                                    {% if product.sizes.exists %}
+
+                                        {% for item in product.sizes.all %}
+
+                                            <span class="badge bg-light text-dark border me-1 mb-1">
+
+                                                {{ item.size }}
+
+                                            </span>
+
+                                        {% endfor %}
+
+                                    {% else %}
+
+                                        {{ product.size|default:"Not specified" }}
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <th>
+                                    Available Colors
+                                </th>
+
+                                <td>
+                                    {{ product.color|default:"Not specified" }}
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REVIEWS -->
+
+                <div class="tab-pane fade"
+                     id="review">
+
+                    <div class="review-empty">
+
+                        <div class="review-star">
+                            ⭐
+                        </div>
+
+                        <h5 class="fw-bold">
+                            No Reviews Yet
+                        </h5>
+
+                        <p class="text-muted mb-0">
+
+                            Be the first customer to review
+                            this product.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RELATED PRODUCTS ================= -->
+
+        <div class="related-section mt-4">
+
+            <div class="mb-3">
+
+                <h3 class="related-heading">
+                    You May Also Like
+                </h3>
+
+                <p class="related-subtitle">
+                    Similar products you might love
+                </p>
+
+            </div>
+
+
+            <div class="row g-3">
+
+                {% for p in related_products %}
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="related-card">
+
+
+                            <!-- IMAGE -->
+
+                            <div class="related-image">
+
+                                {% if p.image %}
+
+                                    <img src="{{ p.image.url }}"
+                                         alt="{{ p.name }}">
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- BODY -->
+
+                            <div class="related-body">
+
+                                <div class="related-name mb-2">
+
+                                    {{ p.name }}
+
+                                </div>
+
+
+                                <div class="small text-muted mb-2">
+
+                                    ⭐ {{ p.rating }}
+
+                                </div>
+
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <span class="related-price">
+
+                                        ₹{{ p.price }}
+
+                                    </span>
+
+
+                                    <a href="{% url 'product_details' p.id %}"
+                                       class="btn btn-sm btn-outline-dark rounded-pill px-3">
+
+                                        View
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <div class="col-12">
+
+                        <p class="text-muted">
+                            No related products available.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const sizeOptions =
+        document.querySelectorAll(".size-option");
+
+    const priceElement =
+        document.getElementById("productPrice");
+
+    const quantityInput =
+        document.getElementById("quantity");
+
+    const stockStatus =
+        document.getElementById("stockStatus");
+
+    const productActions =
+        document.getElementById("productActions");
+
+
+    function updateSizeDetails() {
+
+        const selectedSize =
+            document.querySelector(".size-option:checked");
+
+        if (!selectedSize) return;
+
+
+        const price =
+            selectedSize.dataset.price;
+
+        const stock =
+            parseInt(selectedSize.dataset.stock) || 0;
+
+
+        /* PRICE */
+
+        if (priceElement && price) {
+
+            priceElement.textContent =
+                "₹" + price;
+
+        }
+
+
+        /* QUANTITY */
+
+        if (quantityInput) {
+
+            quantityInput.max = stock;
+
+            if (stock > 0) {
+
+                let current =
+                    parseInt(quantityInput.value) || 1;
+
+                if (
+                    current < 1 ||
+                    current > stock
+                ) {
+
+                    quantityInput.value = 1;
+
+                }
+
+            } else {
+
+                quantityInput.value = 0;
+
+            }
+
+        }
+
+
+        /* STOCK STATUS */
+
+        if (stockStatus) {
+
+            if (stock > 0) {
+
+                stockStatus.className =
+                    "stock-status text-success";
+
+                stockStatus.innerHTML =
+                    "✔ " + stock + " Available";
+
+            } else {
+
+                stockStatus.className =
+                    "stock-status text-danger";
+
+                stockStatus.innerHTML =
+                    "✖ Out of Stock";
+
+            }
+
+        }
+
+
+        /* ACTION BUTTON */
+
+        if (productActions) {
+
+            if (stock > 0) {
+
+                productActions.innerHTML = `
+
+                    <div class="product-actions">
+
+                        <button type="submit"
+                                class="add-cart-btn">
+
+                            <i class="fa-solid fa-cart-shopping me-2"></i>
+
+                            Add To Cart
+
+                        </button>
+
+
+                        <a href="{% url 'checkout' %}"
+                           class="shop-now-btn text-center text-decoration-none">
+
+                            <i class="fa-solid fa-bag-shopping me-2"></i>
+
+                            Buy Now
+
+                        </a>
+
+                    </div>
+
+                `;
+
+            } else {
+
+                productActions.innerHTML = `
+
+                    <button type="button"
+                            class="btn btn-secondary w-100 py-2"
+                            disabled>
+
+                        Out of Stock
+
+                    </button>
+
+                `;
+
+            }
+
+        }
+
+    }
+
+
+    /* SIZE CHANGE */
+
+    sizeOptions.forEach(function (option) {
+
+        option.addEventListener(
+            "change",
+            updateSizeDetails
+        );
+
+    });
+
+
+    /* INITIAL SIZE */
+
+    if (sizeOptions.length > 0) {
+
+        updateSizeDetails();
+
+    } else {
+
+        if (stockStatus) {
+
+            const oldStock =
+                parseInt("{{ product.stock }}") || 0;
+
+
+            if (oldStock > 0) {
+
+                stockStatus.className =
+                    "stock-status text-success";
+
+                stockStatus.innerHTML =
+                    "✔ " + oldStock + " Available";
+
+            } else {
+
+                stockStatus.className =
+                    "stock-status text-danger";
+
+                stockStatus.innerHTML =
+                    "✖ Out of Stock";
+
+            }
+
+        }
+
+    }
+
+});
+
+
+/* ================= INCREASE QUANTITY ================= */
+
+function increaseQty() {
+
+    const qty =
+        document.getElementById("quantity");
+
+    if (!qty) return;
+
+
+    let current =
+        parseInt(qty.value) || 1;
+
+    let max =
+        parseInt(qty.getAttribute("max")) || 999;
+
+
+    if (current < max) {
+
+        qty.value =
+            current + 1;
+
+    }
+
+}
+
+
+/* ================= DECREASE QUANTITY ================= */
+
+function decreaseQty() {
+
+    const qty =
+        document.getElementById("quantity");
+
+    if (!qty) return;
+
+
+    let current =
+        parseInt(qty.value) || 1;
+
+
+    if (current > 1) {
+
+        qty.value =
+            current - 1;
+
+    }
+
+}
+
+</script>
+
+{% endblock %}

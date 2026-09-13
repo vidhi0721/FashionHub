@@ -1,0 +1,121 @@
+{% extends 'adminpanel/index.html' %}
+
+{% block admin_content %}
+
+<div class="container-fluid py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-success text-white">
+
+            <h4 class="mb-0">
+                <i class="fa-solid fa-image"></i>
+                Add Banner
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label">Banner Title</label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Subtitle</label>
+
+                    <textarea
+                        name="subtitle"
+                        class="form-control"
+                        rows="3"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Banner Image</label>
+
+                    <input
+                        type="file"
+                        name="image"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Button Text</label>
+
+                    <input
+                        type="text"
+                        name="button_text"
+                        class="form-control"
+                        value="Shop Now">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Button Link</label>
+
+                    <input
+                        type="text"
+                        name="button_link"
+                        class="form-control"
+                        value="/shop/">
+
+                </div>
+
+                <div class="form-check mb-4">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="is_active"
+                        checked>
+
+                    <label class="form-check-label">
+
+                        Active Banner
+
+                    </label>
+
+                </div>
+
+                <button class="btn btn-success">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save Banner
+
+                </button>
+
+                <a href="{% url 'admin_banners' %}"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

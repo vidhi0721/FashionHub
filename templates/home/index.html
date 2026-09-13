@@ -1,0 +1,522 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- =========================================================
+     HERO SECTION
+========================================================= -->
+
+<div id="heroCarousel"
+     class="carousel slide carousel-fade"
+     data-bs-ride="carousel"
+     data-bs-interval="5000">
+
+    <div class="carousel-inner">
+
+        {% for banner in banners %}
+
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+
+            {% if banner.image %}
+            <img src="{{ banner.image.url }}"
+                 class="hero-img d-block w-100"
+                 alt="{{ banner.title }}">
+            {% endif %}
+
+            <div class="hero-overlay"></div>
+
+            <div class="hero-content">
+
+                <span class="hero-badge">
+                    ✨ NEW COLLECTION
+                </span>
+
+                <h1>
+                    {{ banner.title }}
+                </h1>
+
+                <p>
+                    {{ banner.subtitle }}
+                </p>
+
+                <a href="{% url 'shop' %}" class="shop-btn">
+                    Shop Now
+                </a>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="carousel-item active">
+
+            <img src="{% static 'images/no-image.png' %}"
+                 class="hero-img d-block w-100"
+                 alt="Fashion Hub">
+
+            <div class="hero-overlay"></div>
+
+            <div class="hero-content">
+
+                <span class="hero-badge">
+                    ✨ FASHION HUB
+                </span>
+
+                <h1>
+                    Discover Your Style
+                </h1>
+
+                <p>
+                    Explore the latest fashion collections
+                    and find your perfect look.
+                </p>
+
+                <a href="{% url 'shop' %}" class="shop-btn">
+                    Shop Now
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- CAROUSEL PREVIOUS -->
+
+    <button class="carousel-control-prev"
+            type="button"
+            data-bs-target="#heroCarousel"
+            data-bs-slide="prev">
+
+        <span class="carousel-control-prev-icon"></span>
+
+    </button>
+
+
+    <!-- CAROUSEL NEXT -->
+
+    <button class="carousel-control-next"
+            type="button"
+            data-bs-target="#heroCarousel"
+            data-bs-slide="next">
+
+        <span class="carousel-control-next-icon"></span>
+
+    </button>
+
+</div>
+
+
+<!-- =========================================================
+     AI STYLE ASSISTANT
+========================================================= -->
+
+<section class="ai-style-section">
+
+    <div class="container">
+
+        <div class="ai-style-card">
+
+            <div class="ai-style-content">
+
+                <span class="ai-badge">
+                    🤖 AI POWERED
+                </span>
+
+                <h2>
+                    Find Your Perfect Style ✨
+                </h2>
+
+                <p>
+                    Tell us your preferences and let our
+                    AI Style Assistant find the perfect
+                    fashion products for you.
+                </p>
+
+                <a href="{% url 'style_assistant' %}"
+                   class="ai-style-btn">
+
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Try AI Style Assistant
+
+                </a>
+
+            </div>
+
+            <div class="ai-style-icon">
+                🤖
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SHOP BY CATEGORY
+========================================================= -->
+
+<section class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="section-title">
+            Shop by Category
+        </h2>
+
+        <p class="section-subtitle">
+            Explore our popular fashion collections
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        {% for c in categories %}
+
+            {% if not c.parent %}
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'shop' %}?category={{ c.id }}"
+                   class="category-link">
+
+                    <div class="category-card">
+
+                        {% if c.image %}
+
+                            <img src="{{ c.image.url }}"
+                                 alt="{{ c.name }}">
+
+                        {% else %}
+
+                            <img src="{% static 'images/no-image.png' %}"
+                                 alt="{{ c.name }}">
+
+                        {% endif %}
+
+                        <div class="category-name">
+                            {{ c.name }}
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        {% empty %}
+
+            <div class="col-12 text-center">
+
+                <h5>No Categories Found</h5>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     EXPLORE OUR COLLECTIONS
+========================================================= -->
+
+<section class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="section-title">
+            Explore Our Collections
+        </h2>
+
+        <p class="section-subtitle">
+            Discover something special from every category
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        {% for p in featured_products %}
+
+        <div class="col-xl-3 col-lg-4 col-md-6 col-6">
+
+            <div class="product-card">
+
+                <!-- PRODUCT IMAGE -->
+
+                <a href="{% url 'product_details' p.id %}"
+                   class="product-image-link">
+
+                    {% if p.image %}
+
+                        <img src="{{ p.image.url }}"
+                             class="product-img"
+                             alt="{{ p.name }}">
+
+                    {% else %}
+
+                        <img src="{% static 'images/no-image.png' %}"
+                             class="product-img"
+                             alt="{{ p.name }}">
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- PRODUCT DETAILS -->
+
+                <div class="product-info">
+
+                    <!-- CATEGORY -->
+
+                    <span class="product-category">
+
+                        {% if p.category %}
+                            {{ p.category.name }}
+                        {% else %}
+                            Fashion
+                        {% endif %}
+
+                    </span>
+
+
+                    <!-- PRODUCT NAME -->
+
+                    <h5 class="product-name">
+                        {{ p.name }}
+                    </h5>
+
+
+                    <!-- RATING -->
+
+                    <div class="product-rating">
+
+                        {% if p.rating >= 4.5 %}
+                            ★★★★★
+                        {% elif p.rating >= 3.5 %}
+                            ★★★★☆
+                        {% elif p.rating >= 2.5 %}
+                            ★★★☆☆
+                        {% elif p.rating >= 1.5 %}
+                            ★★☆☆☆
+                        {% elif p.rating >= 0.5 %}
+                            ★☆☆☆☆
+                        {% else %}
+                            ☆☆☆☆☆
+                        {% endif %}
+
+                        <span>
+                            {{ p.rating|default:"0" }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="product-price">
+                        ₹{{ p.price }}
+                    </div>
+
+
+                    <!-- ADD TO CART -->
+
+                    <a href="{% url 'add_to_cart' p.id %}"
+                       class="cart-btn">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        Add to Cart
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="col-12">
+
+            <div class="empty-products">
+
+                <i class="fa-solid fa-box-open"></i>
+
+                <h5>
+                    No Products Available
+                </h5>
+
+                <p>
+                    Products will appear here once they are added.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- VIEW ALL PRODUCTS -->
+
+    {% if featured_products %}
+
+    <div class="text-center mt-5">
+
+        <a href="{% url 'shop' %}"
+           class="view-all-btn">
+
+            View All Products
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- =========================================================
+     WHY CHOOSE US
+========================================================= -->
+
+<section class="why-section py-5">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <h2 class="section-title">
+                Why Choose Fashion Hub?
+            </h2>
+
+            <p class="section-subtitle">
+                We make your shopping experience fast,
+                secure and hassle-free.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- FREE SHIPPING -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🚚
+                    </div>
+
+                    <h5>
+                        Free Shipping
+                    </h5>
+
+                    <p>
+                        Free delivery on all orders over ₹999.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SECURE PAYMENT -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🔒
+                    </div>
+
+                    <h5>
+                        Secure Payment
+                    </h5>
+
+                    <p>
+                        100% safe and secure payment methods.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- EASY RETURNS -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🔄
+                    </div>
+
+                    <h5>
+                        Easy Returns
+                    </h5>
+
+                    <p>
+                        Easy return and refund policy.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- CUSTOMER SUPPORT -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🎧
+                    </div>
+
+                    <h5>
+                        Customer Support
+                    </h5>
+
+                    <p>
+                        Friendly support whenever you need us.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

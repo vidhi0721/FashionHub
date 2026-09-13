@@ -1,0 +1,116 @@
+{% extends 'adminpanel/index.html' %}
+{% load static %}
+
+{% block admin_content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+            <i class="fa-solid fa-tags text-success"></i>
+            Brand Management
+        </h2>
+
+        <a href="{% url 'add_brand' %}" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i>
+            Add Brand
+        </a>
+
+    </div>
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-success">
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Image</th>
+
+                            <th>Brand Name</th>
+
+                            <th width="180">Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for brand in brands %}
+
+                        <tr>
+
+                            <td>{{ brand.id }}</td>
+
+                            <td>
+
+                                {% if brand.image %}
+                                    <img src="{{ brand.image.url }}"
+                                         width="60"
+                                         height="60"
+                                         class="rounded border">
+                                {% else %}
+                                    No Image
+                                {% endif %}
+
+                            </td>
+
+                            <td>{{ brand.name }}</td>
+
+                            <td>
+
+                                <a href="{% url 'edit_brand' brand.id %}"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </a>
+
+                                <a href="{% url 'delete_brand' brand.id %}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Delete this Brand?')">
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="4" class="text-center text-muted py-5">
+
+                                No Brands Found
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
