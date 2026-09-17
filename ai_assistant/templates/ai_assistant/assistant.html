@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block content %}
 
+<link rel="stylesheet" href="{% static 'ai_assistant/assistant.css' %}">
 <div class="ai-page">
 
     <div class="ai-container">
-
-        <!-- ===================================================== -->
-        <!-- HEADER -->
-        <!-- ===================================================== -->
 
         <div class="ai-header">
 
@@ -24,17 +22,7 @@
 
         </div>
 
-
-        <!-- ===================================================== -->
-        <!-- CHAT BOX -->
-        <!-- ===================================================== -->
-
         <div class="chat-box" id="ai-chat">
-
-
-            <!-- ================================================= -->
-            <!-- CHAT HISTORY -->
-            <!-- ================================================= -->
 
             {% for message in chat_messages %}
 
@@ -65,12 +53,6 @@
                 {% endif %}
 
             {% endfor %}
-
-
-
-            <!-- ================================================= -->
-            <!-- STEP 0 : CATEGORY -->
-            <!-- ================================================= -->
 
             {% if step == "category" %}
 
@@ -108,45 +90,17 @@
 
                         <div class="small-options">
 
-                            <button
-                                type="submit"
-                                name="category"
-                                value="Women"
-                                class="small-option"
-                            >
-                                👗 Women
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="category"
-                                value="Men"
-                                class="small-option"
-                            >
-                                👕 Men
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="category"
-                                value="Beauty"
-                                class="small-option"
-                            >
-                                💄 Beauty
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="category"
-                                value="Bags"
-                                class="small-option"
-                            >
-                                👜 Bags
-                            </button>
-
+                            {% for item in category_options %}
+                                <button
+                                    type="submit"
+                                    name="category"
+                                    value="{{ item.value }}"
+                                    class="small-option"
+                                >
+                                    {{ item.icon }} {{ item.name }}
+                                </button>
+                            {% endfor %}
+                        
                         </div>
 
                     </form>
@@ -154,12 +108,6 @@
                 </div>
 
             {% endif %}
-
-
-
-            <!-- ================================================= -->
-            <!-- STEP 1 : SUBCATEGORY -->
-            <!-- ================================================= -->
 
             {% if step == "subcategory" %}
 
@@ -196,53 +144,17 @@
 
 
                         <div class="small-options">
-
                             {% for item in subcategory_options %}
-
                                 <button
                                     type="submit"
                                     name="subcategory"
-                                    value="{{ item }}"
+                                    value="{{ item.name }}"
                                     class="small-option"
                                 >
-
-                                    {% if item == "Dress" %}
-                                        👗
-                                    {% elif item == "Tops" %}
-                                        👚
-                                    {% elif item == "Saree" %}
-                                        🥻
-                                    {% elif item == "Ethnic Wear" %}
-                                        👘
-                                    {% elif item == "Jeans" %}
-                                        👖
-                                    {% elif item == "T-Shirts" %}
-                                        👕
-                                    {% elif item == "Shirt" %}
-                                        👔
-                                    {% elif item == "Watch" %}
-                                        ⌚
-                                    {% elif item == "Belt" %}
-                                        🪢
-                                    {% elif item == "Makeup" %}
-                                        💄
-                                    {% elif item == "Haircare" %}
-                                        💇
-                                    {% elif item == "Skincare" %}
-                                        🧴
-                                    {% elif item == "Handbag" %}
-                                        👜
-                                    {% elif item == "Wallet" %}
-                                        👛
-                                    {% elif item == "Backpack" %}
-                                        🎒
-                                    {% endif %}
-
-                                    {{ item }}
-
+                                    {{ item.icon }} {{ item.name }}
                                 </button>
-
                             {% endfor %}
+                        </div>
 
                         </div>
 
@@ -276,11 +188,6 @@
 
             {% endif %}
 
-
-
-            <!-- ================================================= -->
-            <!-- STEP 2 : COLOR -->
-            <!-- ================================================= -->
 
             {% if step == "color" %}
 
@@ -318,87 +225,18 @@
 
                         <div class="small-options">
 
-                            <button
-                                type="submit"
-                                name="color"
-                                value="Black"
-                                class="small-option"
-                            >
-                                ⚫ Black
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="color"
-                                value="White"
-                                class="small-option"
-                            >
-                                ⚪ White
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="color"
-                                value="Brown"
-                                class="small-option"
-                            >
-                                🤎 Brown / Beige
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="color"
-                                value="Blue"
-                                class="small-option"
-                            >
-                                🔵 Blue
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="color"
-                                value="Pink"
-                                class="small-option"
-                            >
-                                🌸 Pink
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="color"
-                                value="Green"
-                                class="small-option"
-                            >
-                                💚 Green
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="color"
-                                value="Purple"
-                                class="small-option"
-                            >
-                                💜 Purple
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="color"
-                                value="Any"
-                                class="small-option"
-                            >
-                                🌈 Any Color
-                            </button>
-
+                            {% for item in color_options %}
+                                <button
+                                    type="submit"
+                                    name="color"
+                                    value="{{ item.value }}"
+                                    class="small-option"
+                                >
+                                    {{ item.icon }} {{ item.name }}
+                                </button>
+                            {% endfor %}
+                        
                         </div>
-
                     </form>
 
 
@@ -455,12 +293,6 @@
 
             {% endif %}
 
-
-
-            <!-- ================================================= -->
-            <!-- STEP 3 : BUDGET -->
-            <!-- ================================================= -->
-
             {% if step == "budget" %}
 
                 <div class="question-area">
@@ -497,55 +329,17 @@
 
                         <div class="small-options">
 
-                            <button
-                                type="submit"
-                                name="budget"
-                                value="1000"
-                                class="small-option"
-                            >
-                                💵 Under ₹1,000
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="budget"
-                                value="2000"
-                                class="small-option"
-                            >
-                                💵 ₹1,000 – ₹2,000
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="budget"
-                                value="3000"
-                                class="small-option"
-                            >
-                                💵 ₹2,000 – ₹3,000
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="budget"
-                                value="5000"
-                                class="small-option"
-                            >
-                                💵 ₹3,000 – ₹5,000
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                name="budget"
-                                value="5000+"
-                                class="small-option"
-                            >
-                                💵 ₹5,000+
-                            </button>
-
+                            {% for item in budget_options %}
+                                <button
+                                    type="submit"
+                                    name="budget"
+                                    value="{{ item.value }}"
+                                    class="small-option"
+                                >
+                                    {{ item.name }}
+                                </button>
+                            {% endfor %}
+                        
                         </div>
 
                     </form>
@@ -604,18 +398,7 @@
 
             {% endif %}
 
-
-
-            <!-- ================================================= -->
-            <!-- RESULT -->
-            <!-- ================================================= -->
-
             {% if step == "result" %}
-
-
-                <!-- ================================================= -->
-                <!-- NO PRODUCTS -->
-                <!-- ================================================= -->
 
                 {% if outfit.no_products %}
 
@@ -658,10 +441,6 @@
                 {% else %}
 
 
-                    <!-- ================================================= -->
-                    <!-- SUCCESS MESSAGE -->
-                    <!-- ================================================= -->
-
                     <div class="chat-message bot">
 
                         <div class="chat-icon">
@@ -687,12 +466,6 @@
                         </div>
 
                     </div>
-
-
-
-                    <!-- ================================================= -->
-                    <!-- RESULT SUMMARY -->
-                    <!-- ================================================= -->
 
                     <div class="result-summary">
 
@@ -734,11 +507,6 @@
                     </div>
 
 
-
-                    <!-- ================================================= -->
-                    <!-- NORMAL PRODUCT RESULT -->
-                    <!-- ================================================= -->
-
                     {% if not outfit.is_complete_outfit %}
 
 
@@ -767,12 +535,6 @@
                             </p>
 
                         </div>
-
-
-
-                        <!-- ================================================= -->
-                        <!-- RECOMMENDED PRODUCTS -->
-                        <!-- ================================================= -->
 
                         <div class="recommended-products">
 
@@ -843,11 +605,6 @@
                             {% endfor %}
 
                         </div>
-
-
-                        <!-- ================================================= -->
-                        <!-- COMPLETE THE LOOK -->
-                        <!-- ================================================= -->
 
                         {% if outfit.matching_products %}
 
@@ -945,11 +702,6 @@
                         {% endif %}
 
 
-
-                        <!-- ================================================= -->
-                        <!-- NORMAL ACTIONS -->
-                        <!-- ================================================= -->
-
                         <div class="action-buttons">
 
                             <a
@@ -971,12 +723,6 @@
 
 
                     {% endif %}
-
-
-
-                    <!-- ================================================= -->
-                    <!-- COMPLETE OUTFIT RESULT -->
-                    <!-- ================================================= -->
 
                     {% if outfit.is_complete_outfit %}
 
@@ -1002,13 +748,6 @@
                             </p>
 
                         </div>
-
-
-
-                        <!-- ================================================= -->
-                        <!-- COMPLETE OUTFIT PRODUCTS -->
-                        <!-- ================================================= -->
-
                         {% if outfit.complete_outfit_products %}
 
                             <div class="section-heading">
@@ -1099,12 +838,6 @@
                             </div>
 
                         {% endif %}
-
-
-
-                        <!-- ================================================= -->
-                        <!-- AFTER COMPLETE OUTFIT -->
-                        <!-- ================================================= -->
 
                         {% if outfit.recommendations %}
 
@@ -1202,11 +935,6 @@
                         {% endif %}
 
 
-
-                        <!-- ================================================= -->
-                        <!-- COMPLETE OUTFIT ACTIONS -->
-                        <!-- ================================================= -->
-
                         <div class="action-buttons">
 
                             <a
@@ -1232,12 +960,6 @@
                 {% endif %}
 
             {% endif %}
-
-
-
-            <!-- ================================================= -->
-            <!-- CHAT INPUT -->
-            <!-- ================================================= -->
 
             <div class="chat-input-area">
 
@@ -1285,1479 +1007,6 @@
     </div>
 
 </div>
-
-
-
-<style>
-
-/* ========================================================= */
-/* PAGE */
-/* ========================================================= */
-
-.ai-page {
-
-    min-height: 90vh;
-
-    background: #fff9fc;
-
-    padding: 45px 15px;
-
-}
-
-
-.ai-container {
-
-    max-width: 1000px;
-
-    margin: auto;
-
-}
-
-
-/* ========================================================= */
-/* HEADER */
-/* ========================================================= */
-
-.ai-header {
-
-    text-align: center;
-
-    margin-bottom: 25px;
-
-}
-
-
-.ai-avatar {
-
-    width: 70px;
-
-    height: 70px;
-
-    margin: auto;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    font-size: 38px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7C3AED,
-            #EC4899
-        );
-
-    box-shadow:
-        0 8px 22px
-        rgba(108,44,241,.2);
-
-}
-
-
-.ai-header h1 {
-
-    font-size: 32px;
-
-    font-weight: 800;
-
-    margin-top: 15px;
-
-}
-
-
-.ai-header p {
-
-    color: #777;
-
-}
-
-
-/* ========================================================= */
-/* CHAT BOX */
-/* ========================================================= */
-
-.chat-box {
-
-background: #fff;
-
-border-radius: 22px;
-
-padding: 28px;
-
-box-shadow:
-    0 8px 30px
-    rgba(0,0,0,.07);
-
-}
-.chat-box::-webkit-scrollbar {
-    width: 10px;
-}
-
-.chat-box::-webkit-scrollbar-track {
-    background: #f5f5f5;
-    border-radius: 10px;
-}
-
-.chat-box::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-.chat-box::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
-}
-
-/* ========================================================= */
-/* CHAT MESSAGE */
-/* ========================================================= */
-
-.chat-message {
-
-    display: flex;
-
-    gap: 10px;
-
-    align-items: flex-start;
-
-    margin-bottom: 18px;
-
-}
-
-
-.chat-message.user {
-
-    justify-content: flex-end;
-
-}
-
-
-.chat-icon {
-
-    width: 38px;
-
-    height: 38px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #f3edff;
-
-    font-size: 21px;
-
-}
-
-
-.bubble {
-
-    max-width: 75%;
-
-    background: #f4efff;
-
-    padding: 12px 17px;
-
-    border-radius: 16px;
-
-    color: #444;
-
-    line-height: 1.5;
-
-}
-
-
-.user-bubble {
-
-    max-width: 70%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7C3AED,
-            #EC4899
-        );
-
-    color: white;
-
-    padding: 11px 16px;
-
-    border-radius:
-        16px 16px 4px 16px;
-
-}
-
-
-/* ========================================================= */
-/* QUESTION */
-/* ========================================================= */
-
-.question-area {
-
-    margin-top: 25px;
-
-}
-
-
-.question-area .chat-message {
-
-    margin-bottom: 15px;
-
-}
-
-
-/* ========================================================= */
-/* OPTIONS */
-/* ========================================================= */
-
-.small-options {
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 9px;
-
-    margin-left: 48px;
-
-}
-
-
-.small-option {
-
-    border: 1px solid #e5e5e5;
-
-    background: white;
-
-    padding: 10px 15px;
-
-    border-radius: 12px;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: .25s;
-
-}
-
-
-.small-option:hover {
-
-    border-color: #7C3AED;
-
-    color: #7C3AED;
-
-    background: #faf7ff;
-
-    transform: translateY(-2px);
-
-}
-
-
-/* ========================================================= */
-/* STEP ACTIONS */
-/* ========================================================= */
-
-.step-actions {
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin-top: 16px;
-
-}
-
-
-.step-actions form {
-
-    margin: 0;
-
-}
-
-
-.skip-btn,
-.stop-btn {
-
-    border-radius: 20px;
-
-    padding: 9px 17px;
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: .25s;
-
-    background: white;
-
-}
-
-
-.skip-btn {
-
-    border: 1px solid #ddd;
-
-    color: #666;
-
-}
-
-
-.skip-btn:hover {
-
-    border-color: #7C3AED;
-
-    color: #7C3AED;
-
-    background: #faf7ff;
-
-}
-
-
-.stop-btn {
-
-    border: 1px solid #ddd;
-
-    color: #777;
-
-}
-
-
-.stop-btn:hover {
-
-    border-color: #ef4444;
-
-    color: #ef4444;
-
-    background: #fff5f5;
-
-}
-
-
-/* ========================================================= */
-/* CHAT INPUT */
-/* ========================================================= */
-
-.chat-input-area {
-
-    border-top: 1px solid #eee;
-
-    margin-top: 30px;
-
-    padding-top: 20px;
-
-}
-
-
-.chat-input-area form {
-
-    display: flex;
-
-    gap: 8px;
-
-}
-
-
-.chat-input-area input {
-    flex: 1;
-
-    border: 1px solid #ddd;
-
-    border-radius: 25px;
-
-    padding: 13px 18px;
-
-    outline: none;
-
-    font-size: 14px;
-
-    background: #fff;
-
-    transition: .2s;
-}
-
-.chat-input-area input:focus {
-    border-color: #7C3AED;
-
-    box-shadow:
-        0 0 0 3px rgba(124,58,237,.08);
-}
-
-.chat-input-area button {
-    width: 46px;
-    height: 46px;
-
-    flex-shrink: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7C3AED,
-            #EC4899
-        );
-
-    color: white;
-
-    cursor: pointer;
-
-    font-size: 18px;
-}
-
-
-.chat-input-area small {
-
-    display: block;
-
-    margin-top: 8px;
-
-    color: #999;
-
-    line-height: 1.6;
-
-}
-
-
-/* ========================================================= */
-/* RESULT SUMMARY */
-/* ========================================================= */
-
-.result-summary {
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    justify-content: center;
-
-    gap: 8px;
-
-    margin: 25px 0;
-
-}
-
-
-.result-summary span {
-
-    background: #f4efff;
-
-    color: #6d28d9;
-
-    padding: 8px 12px;
-
-    border-radius: 18px;
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-}
-
-
-/* ========================================================= */
-/* RESULT HEADER */
-/* ========================================================= */
-
-.complete-look-header {
-
-    text-align: center;
-
-    margin: 25px 0 30px;
-
-}
-
-
-.complete-badge {
-
-    display: inline-block;
-
-    padding: 6px 12px;
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #f3e8ff,
-            #fce7f3
-        );
-
-    color: #7C3AED;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    letter-spacing: .7px;
-
-}
-
-
-.look-title {
-
-    text-align: center;
-
-    font-size: 25px;
-
-    font-weight: 800;
-
-    margin: 12px 0 5px;
-
-}
-
-
-.look-subtitle {
-
-    color: #888;
-
-    font-size: 13px;
-
-    margin: 0;
-
-}
-
-
-/* ========================================================= */
-/* SECTION HEADING */
-/* ========================================================= */
-
-.section-heading {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin: 25px 0 15px;
-
-}
-
-
-.heading-icon {
-
-    width: 40px;
-
-    height: 40px;
-
-    flex-shrink: 0;
-
-    border-radius: 12px;
-
-    background: #f4efff;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 20px;
-
-}
-
-
-.section-heading h3 {
-
-    font-size: 17px;
-
-    margin: 0;
-
-    font-weight: 800;
-
-}
-
-
-.section-heading p {
-
-    margin: 2px 0 0;
-
-    font-size: 12px;
-
-    color: #999;
-
-}
-
-
-/* ========================================================= */
-/* RECOMMENDED PRODUCTS */
-/* ========================================================= */
-
-.recommended-products {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-    gap: 18px;
-
-}
-
-
-.recommended-card {
-
-    position: relative;
-
-    border: 1px solid #eee;
-
-    border-radius: 16px;
-
-    overflow: hidden;
-
-    background: white;
-
-    transition: .25s;
-
-    min-width: 0;
-
-}
-
-
-.recommended-card:hover {
-
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.08);
-
-}
-
-
-.recommended-card img {
-
-    width: 100%;
-
-    height: 220px;
-
-    object-fit: contain;
-
-    padding: 10px;
-
-}
-
-
-.recommended-no-image {
-
-    width: 100%;
-
-    height: 220px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #faf7ff;
-
-    font-size: 42px;
-
-}
-
-
-.recommended-badge {
-
-    position: absolute;
-
-    top: 9px;
-
-    left: 9px;
-
-    z-index: 2;
-
-    padding: 5px 8px;
-
-    border-radius: 15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7C3AED,
-            #EC4899
-        );
-
-    color: white;
-
-    font-size: 8px;
-
-    font-weight: 800;
-
-    letter-spacing: .5px;
-
-}
-
-
-.recommended-info {
-
-    padding: 13px;
-
-}
-
-
-.recommended-info small {
-
-    color: #7C3AED;
-
-    font-size: 10px;
-
-    font-weight: 600;
-
-}
-
-
-.recommended-info h3 {
-
-    font-size: 14px;
-
-    margin: 5px 0 7px;
-
-    min-height: 38px;
-
-    line-height: 1.35;
-
-    color: #333;
-
-}
-
-
-.recommended-info strong {
-
-    color: #7C3AED;
-
-    font-size: 17px;
-
-}
-
-
-/* ========================================================= */
-/* PRODUCT VIEW BUTTON */
-/* ========================================================= */
-
-.view-btn {
-
-    display: block;
-
-    margin-top: 10px;
-
-    padding: 9px;
-
-    text-align: center;
-
-    border-radius: 18px;
-
-    background: #f4efff;
-
-    color: #6d28d9;
-
-    text-decoration: none;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    transition: .2s;
-
-}
-
-
-.view-btn:hover {
-
-    background: #7C3AED;
-
-    color: white;
-
-}
-
-
-/* ========================================================= */
-/* MATCHING SECTION */
-/* ========================================================= */
-
-.matching-section {
-
-    margin-top: 30px;
-
-    padding-top: 22px;
-
-    border-top: 1px solid #eeeeee;
-
-}
-
-
-.matching-heading {
-
-    margin-top: 0;
-
-}
-
-
-.matching-products {
-
-    display: flex;
-
-    gap: 14px;
-
-    flex-wrap: nowrap;
-
-    overflow-x: auto;
-
-    padding-bottom: 8px;
-
-}
-
-
-.matching-card {
-
-    position: relative;
-
-    overflow: hidden;
-
-    border-radius: 15px;
-
-    background: #fff;
-
-    border: 1px solid #eeeeee;
-
-    transition: .25s;
-
-    width: 160px;
-
-    min-width: 160px;
-
-    flex: 0 0 160px;
-
-}
-
-
-.matching-card:hover {
-
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.08);
-
-}
-
-
-.matching-card img {
-
-    width: 100%;
-
-    height: 125px;
-
-    object-fit: contain;
-
-    padding: 7px;
-
-}
-
-
-.matching-no-image {
-
-    width: 100%;
-
-    height: 125px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #faf7ff;
-
-    font-size: 32px;
-
-}
-
-
-.matching-badge {
-
-    position: absolute;
-
-    top: 7px;
-
-    left: 7px;
-
-    z-index: 2;
-
-    padding: 4px 7px;
-
-    border-radius: 15px;
-
-    background: #fce7f3;
-
-    color: #db2777;
-
-    font-size: 8px;
-
-    font-weight: 800;
-
-}
-
-
-.matching-info {
-
-    padding: 9px;
-
-}
-
-
-.matching-info small {
-
-    color: #7C3AED;
-
-    font-size: 9px;
-
-    font-weight: 600;
-
-}
-
-
-.matching-info h4 {
-
-    font-size: 12px;
-
-    margin: 4px 0 6px;
-
-    min-height: 32px;
-
-    line-height: 1.35;
-
-    color: #333;
-
-}
-
-
-.matching-price {
-
-    color: #7C3AED;
-
-    font-size: 14px;
-
-    font-weight: 800;
-
-}
-
-
-.matching-view-btn {
-
-    display: block;
-
-    margin-top: 7px;
-
-    padding: 6px;
-
-    text-align: center;
-
-    border-radius: 12px;
-
-    background: #f4efff;
-
-    color: #6d28d9;
-
-    text-decoration: none;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    transition: .2s;
-
-}
-
-
-.matching-view-btn:hover {
-
-    background: #7C3AED;
-
-    color: white;
-
-}
-
-
-/* ========================================================= */
-/* COMPLETE OUTFIT */
-/* ========================================================= */
-
-.complete-outfit-products {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-    gap: 18px;
-
-}
-
-
-.outfit-card {
-
-    position: relative;
-
-    border: 1px solid #eee;
-
-    border-radius: 16px;
-
-    overflow: hidden;
-
-    background: white;
-
-    transition: .25s;
-
-    min-width: 0;
-
-}
-
-
-.outfit-card:hover {
-
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.08);
-
-}
-
-
-.outfit-card img {
-
-    width: 100%;
-
-    height: 220px;
-
-    object-fit: contain;
-
-    padding: 10px;
-
-}
-
-
-.no-image {
-
-    width: 100%;
-
-    height: 220px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #faf7ff;
-
-    font-size: 42px;
-
-}
-
-
-.product-role {
-
-    position: absolute;
-
-    top: 9px;
-
-    left: 9px;
-
-    z-index: 2;
-
-    padding: 5px 8px;
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7C3AED,
-            #EC4899
-        );
-
-    color: white;
-
-    font-size: 8px;
-
-    font-weight: 800;
-
-    letter-spacing: .5px;
-
-}
-
-
-.outfit-info {
-
-    padding: 13px;
-
-}
-
-
-.outfit-info small {
-
-    color: #7C3AED;
-
-    font-size: 10px;
-
-    font-weight: 600;
-
-}
-
-
-.outfit-info h3 {
-
-    font-size: 14px;
-
-    margin: 5px 0 7px;
-
-    min-height: 38px;
-
-    line-height: 1.35;
-
-}
-
-
-.outfit-info strong {
-
-    color: #7C3AED;
-
-    font-size: 17px;
-
-}
-
-
-/* ========================================================= */
-/* AFTER OUTFIT RECOMMENDATIONS */
-/* ========================================================= */
-
-.recommendation-after-outfit {
-
-    margin-top: 32px;
-
-    padding-top: 22px;
-
-    border-top: 1px solid #eeeeee;
-
-}
-
-
-/* ========================================================= */
-/* ACTION BUTTONS */
-/* ========================================================= */
-
-.action-buttons {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: 10px;
-
-    margin-top: 25px;
-
-}
-
-
-.shop-btn,
-.again-btn {
-
-    padding: 11px 18px;
-
-    border-radius: 22px;
-
-    text-decoration: none;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    text-align: center;
-
-}
-
-
-.shop-btn {
-
-    background:
-        linear-gradient(
-            90deg,
-            #6C2CF1,
-            #E84393
-        );
-
-    color: white;
-
-}
-
-
-.again-btn {
-
-    background: #f4efff;
-
-    color: #6d28d9;
-
-}
-
-
-.shop-btn:hover {
-
-    color: white;
-
-    transform: translateY(-1px);
-
-}
-
-
-/* ========================================================= */
-/* NO RESULT */
-/* ========================================================= */
-
-.no-result {
-
-    text-align: center;
-
-    padding: 35px 10px;
-
-}
-
-
-.no-result-icon {
-
-    font-size: 48px;
-
-}
-
-
-.no-result h3 {
-
-    margin-top: 10px;
-
-    font-size: 22px;
-
-    font-weight: 800;
-
-}
-
-
-.no-result p {
-
-    color: #777;
-
-    font-size: 14px;
-
-}
-
-
-.no-result-help {
-
-    font-size: 13px !important;
-
-    color: #999 !important;
-
-}
-
-
-/* ========================================================= */
-/* MOBILE */
-/* ========================================================= */
-
-@media(max-width: 900px) {
-
-    .recommended-products,
-    .complete-outfit-products {
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-    }
-
-}
-
-
-@media(max-width: 600px) {
-
-    .ai-page {
-
-        padding: 30px 10px;
-
-    }
-
-
-    .chat-box {
-
-    padding: 20px 15px;
-
-    border-radius: 18px;
-
-    max-height: 75vh;
-
-    overflow-y: auto;
-
-    }
-
-
-    .ai-header h1 {
-
-        font-size: 27px;
-
-    }
-
-
-    .small-options {
-
-        margin-left: 0;
-
-    }
-
-
-    .small-option {
-
-        padding: 9px 12px;
-
-        font-size: 13px;
-
-    }
-
-
-    .step-actions {
-
-        flex-wrap: wrap;
-
-    }
-
-
-    .recommended-products,
-    .complete-outfit-products {
-
-        display: flex;
-
-        overflow-x: auto;
-
-        gap: 14px;
-
-        padding-bottom: 8px;
-
-    }
-
-
-    .recommended-card,
-    .outfit-card {
-
-        min-width: 210px;
-
-        width: 210px;
-
-        flex: 0 0 210px;
-
-    }
-
-
-    .recommended-card img,
-    .recommended-no-image,
-    .outfit-card img,
-    .no-image {
-
-        height: 220px;
-
-    }
-
-
-    .matching-products {
-
-        overflow-x: auto;
-
-    }
-
-
-    .action-buttons {
-
-        flex-direction: column;
-
-    }
-
-
-    .action-buttons a {
-
-        text-align: center;
-
-        width: 100%;
-
-    }
-
-
-    .look-title {
-
-        font-size: 22px;
-
-    }
-
-
-    .bubble {
-
-        max-width: 82%;
-
-    }
-
-
-    .user-bubble {
-
-        max-width: 82%;
-
-    }
-
-}
-
-
-@media(max-width:400px) {
-
-    .recommended-card,
-    .outfit-card {
-
-        min-width: 190px;
-
-        width: 190px;
-
-        flex-basis: 190px;
-
-    }
-
-
-    .matching-card {
-
-        width: 150px;
-
-        min-width: 150px;
-
-        flex-basis: 150px;
-
-    }
-
-}
-
-</style>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     

@@ -7,7 +7,6 @@
 
 <div class="container-fluid py-4">
 
-    <!-- ================= HEADER ================= -->
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
@@ -20,8 +19,6 @@
 
     </div>
 
-
-    <!-- ================= CARD ================= -->
 
     <div class="card shadow border-0 rounded-4">
 
@@ -44,9 +41,6 @@
 
                 <div class="row">
 
-
-                    <!-- ================= PRODUCT NAME ================= -->
-
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label fw-bold">
@@ -61,9 +55,6 @@
                             required>
 
                     </div>
-
-
-                    <!-- ================= MAIN CATEGORY ================= -->
 
                     <div class="col-md-6 mb-3">
 
@@ -101,9 +92,6 @@
                         </select>
 
                     </div>
-
-
-                    <!-- ================= SUB CATEGORY ================= -->
 
                     <div class="col-md-6 mb-3">
 
@@ -144,9 +132,6 @@
 
                     </div>
 
-
-                    <!-- ================= BRAND ================= -->
-
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label fw-bold">
@@ -163,8 +148,6 @@
 
                     </div>
 
-
-                    <!-- ================= DISCOUNT ================= -->
 
                     <div class="col-md-4 mb-3">
 
@@ -183,8 +166,6 @@
                     </div>
 
 
-                    <!-- ================= RATING ================= -->
-
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label fw-bold">
@@ -201,11 +182,6 @@
                             value="{{ product.rating }}">
 
                     </div>
-
-
-                    <!-- =====================================================
-                         SIZE + PRICE + STOCK
-                    ====================================================== -->
 
                     <div class="col-md-12 mb-4">
 
@@ -237,18 +213,12 @@
 
                             </div>
 
-
-                            <!-- SIZE CONTAINER -->
-
                             <div id="sizeContainer">
 
 
                                 {% for item in product.sizes.all %}
 
                                 <div class="row g-2 mb-2 size-row">
-
-
-                                    <!-- SIZE -->
 
                                     <div class="col-md-4">
 
@@ -260,9 +230,6 @@
                                             placeholder="Example: L">
 
                                     </div>
-
-
-                                    <!-- PRICE -->
 
                                     <div class="col-md-4">
 
@@ -277,9 +244,6 @@
 
                                     </div>
 
-
-                                    <!-- STOCK -->
-
                                     <div class="col-md-3">
 
                                         <input
@@ -291,9 +255,6 @@
                                             min="0">
 
                                     </div>
-
-
-                                    <!-- DELETE -->
 
                                     <div class="col-md-1">
 
