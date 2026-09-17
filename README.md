@@ -12,7 +12,42 @@ CSS3
 JavaScript
 Bootstrap
 SQLite
-Font Awesome
+🚀 Key Features
+👤 User Features
+User registration and login
+Browse fashion and beauty products
+Product search and filtering
+Product details with images, price, rating, sizes, colors, offers, and highlights
+Add products to Watchlist
+Add products to Cart
+Quantity management
+Checkout and order placement
+View previous orders
+Edit user profile
+🤖 AI Fashion Assistant
+Interactive AI-style fashion assistant
+Category-based recommendations
+Subcategory selection
+Color preference
+Budget-based filtering
+Occasion-based recommendations
+Personalized product recommendations
+Complete outfit recommendations
+Matching fashion item suggestions
+Supports Women, Men, Beauty, and Bags categories
+👨‍💼 Admin Panel
+Admin authentication
+Dashboard
+Product management
+Add and edit products
+Category management
+Brand management
+Customer management
+Order management
+Banner management
+Product sizes, prices, and stock management
+Product offers and highlights
+
 📂 Project Structure
 FashionHub/
 ├── accounts/
