@@ -53,21 +53,7 @@ Banner management
 Product sizes, prices, and stock management
 Product offers and highlights
 
-📂 Project Structure
-FashionHub/
-├── accounts/
-├── adminpanel/
-├── ai_assistant/
-├── cart/
-├── checkout/
-├── config/
-├── contact/
-├── home/
-├── products/
-├── static/
-├── templates/
-├── manage.py
-└── README.md
+
 🤖 AI Fashion Assistant
 
 The AI Fashion Assistant uses rule-based recommendation logic to understand user preferences and provide relevant fashion products and outfit combinations.
