@@ -14,6 +14,7 @@ Bootstrap
 SQLite
 🚀 Key Features
 👤 User Features
+
 User registration and login
 Browse fashion and beauty products
 Product search and filtering
@@ -24,7 +25,9 @@ Quantity management
 Checkout and order placement
 View previous orders
 Edit user profile
-🤖 AI Fashion Assistant
+
+🤖 AI Fashion Assistant:-
+
 Interactive AI-style fashion assistant
 Category-based recommendations
 Subcategory selection
@@ -35,7 +38,9 @@ Personalized product recommendations
 Complete outfit recommendations
 Matching fashion item suggestions
 Supports Women, Men, Beauty, and Bags categories
-👨‍💼 Admin Panel
+
+👨‍💼 Admin Panel:-
+
 Admin authentication
 Dashboard
 Product management
